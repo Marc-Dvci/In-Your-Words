@@ -14,8 +14,8 @@ export function Home({ start, verify, receive, resume }: { start: () => void; ve
         before anything changes it.
       </h1>
       <p class="lede">
-        A guided interview that can only ask about words you have already used. The questions are written on this device, and only a fingerprint of your
-        account is sealed.
+        A guided interview that can only ask about words you have already used. The questions are written on this device, and only a fingerprint of your account
+        is sealed.
       </p>
       <div class="actions">
         {resume ? (

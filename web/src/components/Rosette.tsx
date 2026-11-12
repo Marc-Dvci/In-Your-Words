@@ -49,7 +49,9 @@ export function Rosette({ hex, again, animate = true, label }: Props) {
       {curves.map((c, i) => (
         <path key={`a${i}`} class="curve" d={curvePath(c, C, C, R)} stroke={`url(#ink-${hex.slice(0, 6)})`} />
       ))}
-      {second?.map((c, i) => <path key={`b${i}`} class="curve again" d={curvePath(c, C, C, R)} />)}
+      {second?.map((c, i) => (
+        <path key={`b${i}`} class="curve again" d={curvePath(c, C, C, R)} />
+      ))}
       <circle class="hub" cx={C} cy={C} r={10} />
     </svg>
   );

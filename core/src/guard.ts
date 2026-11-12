@@ -27,15 +27,7 @@ export function indexWitness(segments: readonly string[]): WitnessIndex {
   };
 }
 
-export type Reason =
-  | "empty"
-  | "too_long"
-  | "not_a_question"
-  | "more_than_one_question"
-  | "closed_form"
-  | "either_or"
-  | "foreign_words"
-  | "quote_not_verbatim";
+export type Reason = "empty" | "too_long" | "not_a_question" | "more_than_one_question" | "closed_form" | "either_or" | "foreign_words" | "quote_not_verbatim";
 
 export interface Span {
   text: string;

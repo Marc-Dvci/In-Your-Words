@@ -104,7 +104,11 @@ describe("parsing a proposal", () => {
 
 describe("deciding what the witness sees", () => {
   it("shows an accepted proposal, labelled with where it ran, with its links", () => {
-    const d = decide(started(), { anchor: "a sticker", question: "You said there was a sticker on the rear window. Tell me everything you remember about it." }, "on_device");
+    const d = decide(
+      started(),
+      { anchor: "a sticker", question: "You said there was a sticker on the rear window. Tell me everything you remember about it." },
+      "on_device",
+    );
     expect(d.prompt.source).toBe("on_device");
     expect(d.prompt.links.map((l) => l.question.text)).toEqual(["sticker on the rear window"]);
     expect(d.prompt.rejected).toEqual([]);
@@ -114,7 +118,9 @@ describe("deciding what the witness sees", () => {
     const d = decide(started(), { anchor: "a sticker", question: "Was the sticker a parking permit?" }, "in_cloud");
     expect(d.prompt.source).toBe("template");
     expect(d.prompt.text).toBe("You said “a sticker”. Tell me everything you remember about that.");
-    expect(d.prompt.rejected).toEqual([{ question: "Was the sticker a parking permit?", reasons: ["closed_form", "foreign_words"], foreign: ["parking", "permit"] }]);
+    expect(d.prompt.rejected).toEqual([
+      { question: "Was the sticker a parking permit?", reasons: ["closed_form", "foreign_words"], foreign: ["parking", "permit"] },
+    ]);
   });
 
   it("falls back to the generic question when the anchor was invented", () => {

@@ -53,10 +53,5 @@ export function stem(word: string): string {
 
 /** Collapses runs of whitespace, trims, and folds typographic quotes, for verbatim comparison. */
 export function normalize(text: string): string {
-  return text
-    .replace(/[‘’]/g, "'")
-    .replace(/[“”]/g, '"')
-    .replace(/\s+/g, " ")
-    .trim()
-    .toLowerCase();
+  return text.replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/\s+/g, " ").trim().toLowerCase();
 }

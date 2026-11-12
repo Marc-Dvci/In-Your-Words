@@ -91,8 +91,8 @@ export function Setup({ begin, back }: { begin: (mode: Mode, engine: HybridEngin
             <Glyph kind="cloud" />
             <h3>{here ? "Or: questions written in the cloud" : "Questions written in the cloud"}</h3>
             <p>
-              Each answer goes to Gemini through Firebase AI Logic, which writes the next question. The same check refuses any question that uses a word you
-              did not say.
+              Each answer goes to Gemini through Firebase AI Logic, which writes the next question. The same check refuses any question that uses a word you did
+              not say.
             </p>
             <div class="actions">
               <button class={here ? "link" : "btn"} type="button" onClick={() => live && begin("cloud", new HybridEngine(live, "cloud"))}>

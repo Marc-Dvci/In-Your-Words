@@ -1,0 +1,13 @@
+node_modules
+web/dist
+coverage
+android
+eval/runs
+eval/data
+web/src/demo/recorded.json
+spec/vectors
+package-lock.json
+test-results
+playwright-report
+*.md
+examples/*.json

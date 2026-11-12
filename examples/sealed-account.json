@@ -1,0 +1,44 @@
+{
+  "app": "In Your Words",
+  "v": 1,
+  "fingerprint": "553114d2c340f93d2fad871c5dc55aef75ed08bd45073a078f087c9d1a854a10",
+  "sealedAt": "2026-11-12T20:01:06.663Z",
+  "account": {
+    "v": 1,
+    "startedAt": "2026-11-12T20:00:37.989Z",
+    "mode": "on_device",
+    "phases": [
+      {
+        "id": "event",
+        "turns": [
+          {
+            "question": "In your own words, tell me everything you remember about what happened. Include every detail, even ones that seem small or unimportant.",
+            "source": "script",
+            "answer": "I was waiting at the crossing by the bakery when a dark estate car came round the corner too fast. It clipped the back wheel of a cyclist and he fell against the kerb. The car slowed for a second, then drove off towards the bridge. I think the driver wore a cap. There was a sticker on the rear window, white, maybe round."
+          },
+          {
+            "question": "You said dark estate car. Tell me everything you remember about it.",
+            "source": "on_device",
+            "answer": "It was round and white, with something written in the middle that I could not read. It was on the left side of the window."
+          }
+        ]
+      },
+      {
+        "id": "people",
+        "turns": []
+      },
+      {
+        "id": "vehicles",
+        "turns": []
+      },
+      {
+        "id": "sequence",
+        "turns": []
+      },
+      {
+        "id": "surroundings",
+        "turns": []
+      }
+    ]
+  }
+}

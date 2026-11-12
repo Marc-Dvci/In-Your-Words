@@ -19,7 +19,9 @@ export const FUNCTION_WORDS: ReadonlySet<string> = new Set(
    not no any some all each every other another such same own more most
    just still also too very really even only again ever
    'd 'll 're 's 've
-   s d ll re ve m t`.split(/\s+/).filter(Boolean),
+   s d ll re ve m t`
+    .split(/\s+/)
+    .filter(Boolean),
 );
 
 export const SCAFFOLD_WORDS: ReadonlySet<string> = new Set(
@@ -27,14 +29,18 @@ export const SCAFFOLD_WORDS: ReadonlySet<string> = new Set(
    explain everything anything else detail details part moment
    see saw seen hear heard notice noticed
    happen happened happening
-   let please take time way words own like go`.split(/\s+/).filter(Boolean),
+   let please take time way words own like go`
+    .split(/\s+/)
+    .filter(Boolean),
 );
 
 /** Auxiliaries and modals that open a yes-or-no question when they lead a sentence. */
 export const CLOSED_OPENERS: ReadonlySet<string> = new Set(
   `is isn't am are aren't was wasn't were weren't do don't does doesn't did didn't
    have haven't has hasn't had hadn't can can't cannot could couldn't will won't would wouldn't
-   shall should shouldn't may might must`.split(/\s+/).filter(Boolean),
+   shall should shouldn't may might must`
+    .split(/\s+/)
+    .filter(Boolean),
 );
 
 /** Imperatives that may open a statement-form prompt ending in a full stop instead of a question mark. */

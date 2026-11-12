@@ -56,7 +56,20 @@ export function sessionFor(text: string): Session {
 export function score(items: Item[], rows: Row[], path: Path): PathScore {
   const byId = new Map(items.map((i) => [i.id, i]));
   const mine = rows.filter((r) => r.path === path);
-  const s: PathScore = { calls: mine.length, errors: 0, unparsed: 0, accepted: 0, refused: 0, reasons: {}, anchorTemplate: 0, genericTemplate: 0, shownRefused: 0, wrongSource: 0, medianMs: null, p90Ms: null };
+  const s: PathScore = {
+    calls: mine.length,
+    errors: 0,
+    unparsed: 0,
+    accepted: 0,
+    refused: 0,
+    reasons: {},
+    anchorTemplate: 0,
+    genericTemplate: 0,
+    shownRefused: 0,
+    wrongSource: 0,
+    medianMs: null,
+    p90Ms: null,
+  };
   const times: number[] = [];
   for (const r of mine) {
     if (r.error || r.raw === null) {

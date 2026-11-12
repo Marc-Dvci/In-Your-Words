@@ -19,9 +19,7 @@ export function sealable(session: Session): SealedAccount {
     mode: session.mode,
     phases: session.phases.map((p) => ({
       id: p.id,
-      turns: p.turns
-        .filter((t) => t.answer.trim().length > 0)
-        .map((t) => ({ question: t.prompt.text, source: t.prompt.source, answer: t.answer })),
+      turns: p.turns.filter((t) => t.answer.trim().length > 0).map((t) => ({ question: t.prompt.text, source: t.prompt.source, answer: t.answer })),
     })),
   };
 }
@@ -55,7 +53,10 @@ export function groupHex(hex: string): string[] {
 
 /** A passport-style machine-readable line for the seal: IYW<<SEALED<<time<<first 24 hex digits. */
 export function mrzLine(hex: string, sealedAt: Date): string {
-  const t = sealedAt.toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
+  const t = sealedAt
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace(/\.\d+Z$/, "Z");
   return `IYW<<SEALED<<${t}<<${hex.slice(0, 24).toUpperCase()}`.padEnd(64, "<");
 }
 

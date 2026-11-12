@@ -15,11 +15,7 @@ export function newCode(random: (n: number) => Uint8Array = (n) => globalThis.cr
 
 /** Normalizes what a person typed: case, spaces, dashes, and the letters Crockford reads as digits. */
 export function cleanCode(typed: string): string | null {
-  const c = typed
-    .toUpperCase()
-    .replace(/[\s-]/g, "")
-    .replace(/[IL]/g, "1")
-    .replace(/O/g, "0");
+  const c = typed.toUpperCase().replace(/[\s-]/g, "").replace(/[IL]/g, "1").replace(/O/g, "0");
   if (c.length !== CODE_CHARS || [...c].some((ch) => !ALPHABET.includes(ch))) return null;
   return c;
 }

@@ -155,14 +155,17 @@ export function Links({ stage, links, deps }: { stage: RefObject<HTMLDivElement 
       drawPath(path, 900, 760 + i * 160);
       src.classList.add("drawn");
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size, links, ...deps]);
 
   return <svg ref={svg} class="links" aria-hidden="true" />;
 }
 
 export function Thinking({ where }: { where: "on_device" | "cloud" | "replay" }) {
-  const label = { on_device: "Writing the next question on this device", cloud: "Writing the next question in the cloud", replay: "Replaying a recorded question" }[where];
+  const label = {
+    on_device: "Writing the next question on this device",
+    cloud: "Writing the next question in the cloud",
+    replay: "Replaying a recorded question",
+  }[where];
   return (
     <div class="thinking" role="status">
       <svg viewBox="0 0 180 28" aria-hidden="true">
@@ -182,9 +185,7 @@ export function GuardNote({ rejected }: { rejected: Rejected[] }) {
       {rejected.map((r, i) => (
         <div class="row" key={i}>
           <span>Checked before you saw it:</span>
-          <span class="cand">
-            “{highlight(r.question, r.foreign)}”
-          </span>
+          <span class="cand">“{highlight(r.question, r.foreign)}”</span>
           <span class="why">{r.reasons.map((x) => REASON_TEXT[x]).join(", ")}</span>
         </div>
       ))}

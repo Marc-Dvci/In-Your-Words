@@ -166,7 +166,9 @@
   text-align: center;
   padding: 24px;
   cursor: pointer;
-  transition: border-color var(--t-mid) var(--ease-out), background-color var(--t-mid) var(--ease-out);
+  transition:
+    border-color var(--t-mid) var(--ease-out),
+    background-color var(--t-mid) var(--ease-out);
 }
 .drop.over {
   border-color: var(--green);

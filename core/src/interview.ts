@@ -18,8 +18,7 @@ export const PHASES: readonly Phase[] = [
   {
     id: "event",
     title: "What happened",
-    opening:
-      "In your own words, tell me everything you remember about what happened. Include every detail, even ones that seem small or unimportant.",
+    opening: "In your own words, tell me everything you remember about what happened. Include every detail, even ones that seem small or unimportant.",
   },
   {
     id: "people",
@@ -39,8 +38,7 @@ export const PHASES: readonly Phase[] = [
   {
     id: "surroundings",
     title: "Surroundings",
-    opening:
-      "Picture the place again. Tell me where you were, what you could see and hear around you, and anyone else who was there.",
+    opening: "Picture the place again. Tell me where you were, what you could see and hear around you, and anyone else who was there.",
   },
 ];
 

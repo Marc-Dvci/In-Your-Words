@@ -97,7 +97,13 @@ describe("shared seal and rosette vectors", () => {
     const account = sealable(s);
     const canonical = canonicalJson(account);
     const hex = await fingerprint(account);
-    const vectors = { about: "Canonical account, its SHA-256 and the rosette it draws. Both platforms must agree.", account, canonical, sha256: hex, rosette: rosette(hex) };
+    const vectors = {
+      about: "Canonical account, its SHA-256 and the rosette it draws. Both platforms must agree.",
+      account,
+      canonical,
+      sha256: hex,
+      rosette: rosette(hex),
+    };
     if (process.env.UPDATE_VECTORS) writeFileSync(file, JSON.stringify(vectors, null, 2) + "\n");
     expect(JSON.parse(readFileSync(file, "utf8"))).toEqual(vectors);
   });

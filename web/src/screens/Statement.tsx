@@ -52,8 +52,8 @@ export function Statement({ account, back }: { account: SealedAccount; back: () 
           Turn your account into a statement.
         </h1>
         <p class="lede">
-          Gemini drafts a first-person statement from your answers, through Firebase AI Logic. Every sentence cites the words you wrote, and code keeps
-          only the sentences built from them.
+          Gemini drafts a first-person statement from your answers, through Firebase AI Logic. Every sentence cites the words you wrote, and code keeps only the
+          sentences built from them.
         </p>
         <div class="actions" style={{ marginTop: "32px" }}>
           <button class="btn green" type="button" disabled={state === "busy"} onClick={() => void run()}>
@@ -77,7 +77,12 @@ export function Statement({ account, back }: { account: SealedAccount; back: () 
   let at = 0;
   for (const r of [...src].sort((a, b) => a.start - b.start)) {
     if (r.start < at) continue;
-    marked.push(text.slice(at, r.start), <mark class="quote-hl" key={r.start}>{text.slice(r.start, r.end)}</mark>);
+    marked.push(
+      text.slice(at, r.start),
+      <mark class="quote-hl" key={r.start}>
+        {text.slice(r.start, r.end)}
+      </mark>,
+    );
     at = r.end;
   }
   marked.push(text.slice(at));

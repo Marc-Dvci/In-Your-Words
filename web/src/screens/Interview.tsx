@@ -1,15 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import {
-  answer as withAnswer,
-  ask,
-  currentTurn,
-  decide,
-  nextPhase,
-  PHASES,
-  phaseIndex,
-  wantsFollowup,
-  type Session,
-} from "@iyw/core";
+import { answer as withAnswer, ask, currentTurn, decide, nextPhase, PHASES, phaseIndex, wantsFollowup, type Session } from "@iyw/core";
 import { Account, GuardNote, Links, Question, Thinking, Write, type Segment } from "../components/InterviewParts";
 import type { Engine } from "../lib/engine";
 import { transition } from "../lib/motion";
@@ -67,12 +57,7 @@ export function Interview({ session, engine, onChange, onDone, onHandover }: Pro
       return;
     }
     setBusy(true);
-    let proposed = null;
-    try {
-      proposed = await engine.propose(answered);
-    } catch {
-      proposed = null;
-    }
+    const proposed = await engine.propose(answered).catch(() => null);
     const d = decide(answered, proposed?.proposal ?? null, proposed?.source ?? "on_device");
     setMs(d.prompt.source === "template" ? null : (proposed?.ms ?? null));
     setBusy(false);

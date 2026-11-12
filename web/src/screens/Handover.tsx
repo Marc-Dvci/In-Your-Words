@@ -22,7 +22,13 @@ export function Send({ session, back }: { session: Session; back: () => void }) 
       <h1 class="display" style={{ fontSize: "clamp(34px, 4.2vw, 52px)" }}>
         Type this code on your other device.
       </h1>
-      {code ? <p class="code">{formatCode(code)}</p> : <p class="code" style={{ opacity: 0.3 }}>····-····-····-····-····</p>}
+      {code ? (
+        <p class="code">{formatCode(code)}</p>
+      ) : (
+        <p class="code" style={{ opacity: 0.3 }}>
+          ····-····-····-····-····
+        </p>
+      )}
       <p class="body">
         Your account travels encrypted with a key made from this code. The code never leaves this screen, so the server stores only ciphertext it cannot read.
         It works once, for 30 minutes.

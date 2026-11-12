@@ -1,12 +1,12 @@
 {
   "name": "In Your Words",
-  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
-  "postCreateCommand": "pip install -r requirements.txt",
-  "postStartCommand": "nohup bash -c 'APP_DEMO=1 python -m uvicorn app.server:app --host 0.0.0.0 --port 8787 > /tmp/demo.log 2>&1 &'",
-  "forwardPorts": [8787],
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:1-24-bookworm",
+  "postCreateCommand": "npm ci",
+  "postStartCommand": "nohup bash -c 'npm run dev -w web -- --host 0.0.0.0 > /tmp/web.log 2>&1 &'",
+  "forwardPorts": [5173],
   "portsAttributes": {
-    "8787": {
-      "label": "In Your Words demo",
+    "5173": {
+      "label": "In Your Words",
       "onAutoForward": "openBrowser"
     }
   },

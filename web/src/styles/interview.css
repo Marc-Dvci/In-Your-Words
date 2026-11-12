@@ -55,7 +55,9 @@
   transition: background-size var(--t-slow) var(--ease-out);
 }
 .answer-text .src.drawn {
-  background-size: 100% 1px, 100% 1px;
+  background-size:
+    100% 1px,
+    100% 1px;
 }
 .answer-text.arrive {
   animation: arrive 640ms var(--ease-out) both;

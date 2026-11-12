@@ -2,15 +2,11 @@
 
 Please report a vulnerability through
 [GitHub's private reporting](https://github.com/Marc-Dvci/In-Your-Words/security/advisories/new), not in a public issue.
-The supported version is the `main` branch and the hosted [live demo]({{LIVE_URL}}).
+The supported version is the `main` branch and the hosted [live site](https://in-your-words-2026.web.app).
 
 The reports that matter most are anything that:
 
-<!-- TEMPLATE: list what the product promises; delete this file if there is no public endpoint, keys, money or
-personal data. -->
-- reads the server's API keys;
-- spends API credit past the live server's budget;
-- changes a stored result without the product noticing.
-
-To dispute what an output says, rather than how the software works,
-[report a correction](https://github.com/Marc-Dvci/In-Your-Words/issues/new?template=correction.yml).
+- stores or transmits a witness's words where the product says only a fingerprint goes (`firebase/firestore.rules`);
+- overwrites or back-dates a seal: a seal is written once, with the server's time;
+- reads a handover without its code: the server holds only AES-GCM ciphertext;
+- calls Firebase AI Logic from outside the app, past App Check.

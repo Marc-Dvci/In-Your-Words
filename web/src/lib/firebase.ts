@@ -53,7 +53,9 @@ async function start(): Promise<Services> {
     projectId: env.VITE_FIREBASE_PROJECT_ID,
     appId: env.VITE_FIREBASE_APP_ID,
   });
-  if (env.VITE_APPCHECK_DEBUG) (self as unknown as { FIREBASE_APPCHECK_DEBUG_TOKEN: string | boolean }).FIREBASE_APPCHECK_DEBUG_TOKEN = env.VITE_APPCHECK_DEBUG === "true" ? true : env.VITE_APPCHECK_DEBUG;
+  if (env.VITE_APPCHECK_DEBUG)
+    (self as unknown as { FIREBASE_APPCHECK_DEBUG_TOKEN: string | boolean }).FIREBASE_APPCHECK_DEBUG_TOKEN =
+      env.VITE_APPCHECK_DEBUG === "true" ? true : env.VITE_APPCHECK_DEBUG;
   if (env.VITE_RECAPTCHA_SITE_KEY || env.VITE_APPCHECK_DEBUG) {
     initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(env.VITE_RECAPTCHA_SITE_KEY ?? "debug"), isTokenAutoRefreshEnabled: true });
   }

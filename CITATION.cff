@@ -1,16 +1,32 @@
 cff-version: 1.2.0
 message: "If you use In Your Words or its evaluation, please cite it as below."
 type: software
-title: "In Your Words: A witness interview that can only ask about what you said"
+title: "In Your Words: a witness interview that can only ask about what you said"
 abstract: >-
-  {{ABSTRACT}}
+  A self-administered witness interview on Firebase AI Logic hybrid inference. Gemini Nano writes follow-up questions
+  on the device, and deterministic code refuses any question that uses a word the witness never said or that can be
+  answered yes or no. A SHA-256 fingerprint of the whole interview is sealed in Firestore with the server's time.
 authors:
   - family-names: Donovici
     given-names: Marc
 version: 1.0.0
-date-released: "{{RELEASE_DATE}}"
-license: MIT
+date-released: "2026-11-30"
+license: Apache-2.0
 repository-code: "https://github.com/Marc-Dvci/In-Your-Words"
-url: "{{DEMO_URL}}"
+url: "https://in-your-words-2026.web.app"
 keywords:
-  - "{{KEYWORD}}"
+  - eyewitness memory
+  - cognitive interview
+  - on-device AI
+  - Gemini Nano
+  - Firebase AI Logic
+  - hybrid inference
+references:
+  - type: data
+    title: "New ways to improve eyewitness identifications using receiver operating characteristics analysis 2015-2018"
+    authors:
+      - family-names: Mickes
+        given-names: Laura
+    doi: 10.5255/UKDA-SN-853369
+    license: CC-BY-4.0
+    year: 2018

@@ -1,6 +1,16 @@
 %% Source of docs/architecture.png, the diagram in the README. Rebuild: python scripts/render_diagram.py
-%% TEMPLATE: replace with the project's own flow; mark where models read and where code decides.
-flowchart TD
-    A["Input<br/>what the user gives"] --> B["Model step<br/>reads, locates, phrases"]
-    B --> C{{"Decision<br/>fixed rules, app/core.py"}}
-    C --> D["Output<br/>with the evidence it rests on"]
+flowchart TB
+    W["The witness's answers"]
+    W --> N["Gemini Nano on the device<br/>Firebase AI Logic, ONLY_ON_DEVICE"]
+    W -.->|"when chosen"| C["Gemini in the cloud<br/>Firebase AI Logic, ONLY_IN_CLOUD"]
+    N --> G{{"Guard: deterministic code<br/>only the witness's words, open questions"}}
+    C --> G
+    G -->|accepted| Q["Question, labelled from inferenceSource"]
+    G -->|refused| T["Fixed question from the witness's own phrase"]
+    Q --> A["The account: every question and answer"]
+    T --> A
+    A --> H["SHA-256 on the device"]
+    H --> S[("Firestore seal<br/>fingerprint and server time, write-once")]
+    A --> E["AES-GCM under a 20-character code"]
+    E --> X[("Firestore handover<br/>ciphertext, 30 minutes")]
+    A -.->|"when asked"| P["Statement drafted in the cloud<br/>each sentence traced to a quote, read back by Gemini TTS"]

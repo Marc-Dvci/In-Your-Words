@@ -128,9 +128,7 @@ describe("the stemmer", () => {
 });
 
 describe("properties", () => {
-  const content = [...new Set(tokenize(vectors.witness[0]!).map((t) => t.text.toLowerCase()))].filter(
-    (w) => !FUNCTION_WORDS.has(w) && !SCAFFOLD_WORDS.has(w),
-  );
+  const content = [...new Set(tokenize(vectors.witness[0]!).map((t) => t.text.toLowerCase()))].filter((w) => !FUNCTION_WORDS.has(w) && !SCAFFOLD_WORDS.has(w));
 
   it("accepts any template question built from the witness's own content words", () => {
     fc.assert(

@@ -77,7 +77,20 @@ describe("shared handover vector", () => {
     const code = "0123456789ABCDEFGHJK";
     if (process.env.UPDATE_VECTORS || !existsSync(file)) {
       const box = await encrypt(code, ACCOUNT);
-      writeFileSync(file, JSON.stringify({ about: "A handover made by the web build. The Android build must derive the same id and open it.", code, recordId: await recordId(code), plain: ACCOUNT, ...box }, null, 2) + "\n");
+      writeFileSync(
+        file,
+        JSON.stringify(
+          {
+            about: "A handover made by the web build. The Android build must derive the same id and open it.",
+            code,
+            recordId: await recordId(code),
+            plain: ACCOUNT,
+            ...box,
+          },
+          null,
+          2,
+        ) + "\n",
+      );
     }
     const v = JSON.parse(readFileSync(file, "utf8")) as { code: string; recordId: string; plain: string; iv: string; ct: string };
     expect(await recordId(v.code)).toBe(v.recordId);
