@@ -54,19 +54,19 @@ const jsonConstraint = {
  * The hybrid model. On a device with a model, `ONLY_ON_DEVICE`: the witness's words never leave, and a failure
  * never falls back to the cloud. Without one, `ONLY_IN_CLOUD`, when the witness chooses the cloud.
  */
-export function hybridModel(s: Services, where: "on_device" | "cloud"): GenerativeModel {
+export function hybridModel(s: Services, where: "on_device" | "cloud", system = SYSTEM_PROMPT): GenerativeModel {
   return getGenerativeModel(s.ai, {
     mode: where === "on_device" ? InferenceMode.ONLY_ON_DEVICE : InferenceMode.ONLY_IN_CLOUD,
     onDeviceParams: {
       createOptions: {
         ...LANGS,
-        initialPrompts: [{ role: "system", content: [{ type: "text", value: SYSTEM_PROMPT }] }],
+        initialPrompts: [{ role: "system", content: [{ type: "text", value: system }] }],
       },
       promptOptions: { responseConstraint: jsonConstraint },
     },
     inCloudParams: {
       model: s.config.cloudModel,
-      systemInstruction: SYSTEM_PROMPT,
+      systemInstruction: system,
       generationConfig: { responseMimeType: "application/json", responseSchema: proposalSchema, temperature: 0.3 },
     },
   });
@@ -76,9 +76,9 @@ export class HybridEngine implements Engine {
   readonly kind: "on_device" | "cloud";
   private model: GenerativeModel;
 
-  constructor(s: Services, where: "on_device" | "cloud") {
+  constructor(s: Services, where: "on_device" | "cloud", system?: string) {
     this.kind = where;
-    this.model = hybridModel(s, where);
+    this.model = hybridModel(s, where, system);
   }
 
   /** Downloads Chrome's model if needed. Must run from a click or key press. */
@@ -86,13 +86,18 @@ export class HybridEngine implements Engine {
     return this.model.initializeDeviceModel(onProgress);
   }
 
-  async propose(session: Session): Promise<Proposed> {
-    const prompt = followupPrompt(session);
+  /** One call to the hybrid model, with where it ran and how long it took. */
+  async generate(prompt: string): Promise<{ raw: string; source: "on_device" | "in_cloud"; ms: number }> {
     const t0 = performance.now();
     const r = await this.model.generateContent(prompt);
     const ms = Math.round(performance.now() - t0);
     const source = r.response.inferenceSource === InferenceSource.ON_DEVICE ? "on_device" : "in_cloud";
-    const raw = r.response.text();
+    return { raw: r.response.text(), source, ms };
+  }
+
+  async propose(session: Session): Promise<Proposed> {
+    const prompt = followupPrompt(session);
+    const { raw, source, ms } = await this.generate(prompt);
     // Development builds keep each real run, so the demo can replay exactly what the model wrote.
     if (import.meta.env.DEV) ((globalThis as { __iywRuns?: Recording[] }).__iywRuns ??= []).push({ prompt, raw, source, ms });
     return { proposal: parseProposal(raw), source, ms };

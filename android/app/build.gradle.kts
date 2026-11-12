@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "app.inyourwords"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "app.inyourwords"

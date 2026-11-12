@@ -169,6 +169,13 @@ Rules:
 - Prefer the form: You said <anchor>. Tell me everything you remember about it.
 Return JSON: {"anchor": "...", "question": "..."}.`;
 
+/**
+ * The baseline for the evaluation: an ordinary interviewer instruction with no rule about the witness's words.
+ * The app never uses it; it measures what the guard protects against.
+ */
+export const PLAIN_SYSTEM_PROMPT = `You help a witness recall an event they saw. Ask ONE follow-up question about their last answer, to help them remember more detail.
+Return JSON: {"anchor": "the part of their answer you ask about", "question": "..."}.`;
+
 export function followupPrompt(session: Session): string {
   const phase = PHASES.find((p) => p.id === currentPhase(session).id)!;
   const all = witnessSegments(session);
