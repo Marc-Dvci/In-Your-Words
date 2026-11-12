@@ -29,7 +29,7 @@ fingerprint of the account is sealed with a time anyone can check.**
 | Criterion | Where it is answered |
 |---|---|
 | Technological implementation | Hybrid modes and `inferenceSource` in [`web/src/lib/engine.ts`](web/src/lib/engine.ts) and [`android/.../Services.kt`](android/app/src/main/java/app/inyourwords/Services.kt); the guard in [`core/src/guard.ts`](core/src/guard.ts), ported to [Kotlin](android/app/src/main/java/app/inyourwords/core/Guard.kt) and held to [shared vectors](spec/vectors); write-once seals in [`firebase/firestore.rules`](firebase/firestore.rules) |
-| Design | [See it work](#see-it-work); the motion is in [`web/src/components`](web/src/components) and [`android/.../ui`](android/app/src/main/java/app/inyourwords/ui); every screen passes WCAG 2.2 AA in the [browser tests](web/test/e2e/app.spec.ts) |
+| Design | [See it work](#see-it-work); the motion is in [`web/src/components`](web/src/components) and [`android/.../ui`](android/app/src/main/java/app/inyourwords/ui); the [browser tests](web/test/e2e/app.spec.ts) check the home, interview and review screens against WCAG 2.2 AA |
 | Potential impact | [The problem](#the-problem), and the [evaluation](docs/EVALUATION.md) on 120 descriptions written by real witnesses |
 | Quality of the idea | [How it works](#how-it-works): the device model writes, deterministic code decides, and only a fingerprint leaves |
 
@@ -183,6 +183,9 @@ free. In Firebase, turn on AI Logic with the Gemini Developer API and register t
 ```sh
 cd android && ./gradlew :app:installDebug
 ```
+
+On first launch the app prints an App Check debug token in logcat. Add it in the Firebase console under App Check,
+Apps, Manage debug tokens.
 
 **Tests:**
 
