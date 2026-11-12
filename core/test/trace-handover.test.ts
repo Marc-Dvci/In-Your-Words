@@ -68,3 +68,19 @@ describe("handover code", () => {
     await expect(decrypt("0123456789ABCDEFGHJM", box)).rejects.toThrow();
   });
 });
+
+/** Shared with the Android build: an id and a ciphertext made here must open there. UPDATE_VECTORS=1 rewrites it. */
+describe("shared handover vector", () => {
+  it("opens with this implementation", async () => {
+    const file = new URL("../../spec/vectors/handover.json", import.meta.url);
+    const { readFileSync, writeFileSync, existsSync } = await import("node:fs");
+    const code = "0123456789ABCDEFGHJK";
+    if (process.env.UPDATE_VECTORS || !existsSync(file)) {
+      const box = await encrypt(code, ACCOUNT);
+      writeFileSync(file, JSON.stringify({ about: "A handover made by the web build. The Android build must derive the same id and open it.", code, recordId: await recordId(code), plain: ACCOUNT, ...box }, null, 2) + "\n");
+    }
+    const v = JSON.parse(readFileSync(file, "utf8")) as { code: string; recordId: string; plain: string; iv: string; ct: string };
+    expect(await recordId(v.code)).toBe(v.recordId);
+    expect(await decrypt(v.code, { iv: v.iv, ct: v.ct })).toBe(v.plain);
+  });
+});

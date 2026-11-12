@@ -5,25 +5,353 @@
     "There were 2 people in the car."
   ],
   "cases": [
-    { "question": "You said there was a sticker on the rear window. Tell me everything you remember about it.", "ok": true, "reasons": [], "foreign": [] },
-    { "question": "Was the sticker a parking permit?", "ok": false, "reasons": ["closed_form", "foreign_words"], "foreign": ["parking", "permit"] },
-    { "question": "What colour was the car?", "ok": false, "reasons": ["foreign_words"], "foreign": ["colour"] },
-    { "question": "Was the car red or blue?", "ok": false, "reasons": ["closed_form", "either_or", "foreign_words"], "foreign": ["red", "blue"] },
-    { "question": "Tell me more about the driver's cap.", "ok": true, "reasons": [], "foreign": [] },
-    { "question": "Describe the man who was driving.", "ok": false, "reasons": ["foreign_words"], "foreign": ["man", "driving"] },
-    { "question": "What happened after the car clipped the back wheel?", "ok": true, "reasons": [], "foreign": [] },
-    { "question": "You said “a white sticker”. Tell me more.", "ok": false, "reasons": ["quote_not_verbatim"], "foreign": [] },
-    { "question": "Tell me about the sticker? And the cap?", "ok": false, "reasons": ["more_than_one_question"], "foreign": [] },
-    { "question": "", "ok": false, "reasons": ["empty"], "foreign": [] },
-    { "question": "The car was speeding", "ok": false, "reasons": ["not_a_question", "foreign_words"], "foreign": ["speeding"] },
-    { "question": "Didn't the driver look at you?", "ok": false, "reasons": ["closed_form", "foreign_words"], "foreign": ["Didn't", "look"] },
-    { "question": "Can you tell me more about the bridge?", "ok": false, "reasons": ["closed_form"], "foreign": [] },
-    { "question": "What else do you remember about this part?", "ok": true, "reasons": [], "foreign": [] },
-    { "question": "You said 2 people were in the car. Describe the 2 people.", "ok": true, "reasons": [], "foreign": [] },
-    { "question": "Describe the 3 people in the car.", "ok": false, "reasons": ["foreign_words"], "foreign": ["3"] },
-    { "question": "You said “sticker”. Tell me everything you remember about that.", "ok": true, "reasons": [], "foreign": [] },
-    { "question": "Tell me everything about the cyclist, the kerb, the bridge, the bakery, the crossing, the corner, the car, the driver, the cap, the sticker, the second, the back wheel and the rear window again.", "ok": false, "reasons": ["too_long"], "foreign": [] },
-    { "question": "WHAT ELSE DO YOU REMEMBER ABOUT THE STICKER?", "ok": true, "reasons": [], "foreign": [] },
-    { "question": "Tell me about the stickers on the windows.", "ok": true, "reasons": [], "foreign": [] }
+    {
+      "question": "You said there was a sticker on the rear window. Tell me everything you remember about it.",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": [
+        [
+          "sticker on the rear window",
+          "sticker on the rear window"
+        ]
+      ]
+    },
+    {
+      "question": "Was the sticker a parking permit?",
+      "ok": false,
+      "reasons": [
+        "closed_form",
+        "foreign_words"
+      ],
+      "foreign": [
+        "parking",
+        "permit"
+      ],
+      "links": [
+        [
+          "sticker",
+          "sticker"
+        ]
+      ]
+    },
+    {
+      "question": "What colour was the car?",
+      "ok": false,
+      "reasons": [
+        "foreign_words"
+      ],
+      "foreign": [
+        "colour"
+      ],
+      "links": [
+        [
+          "car",
+          "car"
+        ]
+      ]
+    },
+    {
+      "question": "Was the car red or blue?",
+      "ok": false,
+      "reasons": [
+        "closed_form",
+        "either_or",
+        "foreign_words"
+      ],
+      "foreign": [
+        "red",
+        "blue"
+      ],
+      "links": [
+        [
+          "car",
+          "car"
+        ]
+      ]
+    },
+    {
+      "question": "Tell me more about the driver's cap.",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": [
+        [
+          "driver's",
+          "driver"
+        ],
+        [
+          "cap",
+          "cap"
+        ]
+      ]
+    },
+    {
+      "question": "Describe the man who was driving.",
+      "ok": false,
+      "reasons": [
+        "foreign_words"
+      ],
+      "foreign": [
+        "man",
+        "driving"
+      ],
+      "links": []
+    },
+    {
+      "question": "What happened after the car clipped the back wheel?",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": [
+        [
+          "car",
+          "car"
+        ],
+        [
+          "clipped the back wheel",
+          "clipped the back wheel"
+        ]
+      ]
+    },
+    {
+      "question": "You said “a white sticker”. Tell me more.",
+      "ok": false,
+      "reasons": [
+        "quote_not_verbatim"
+      ],
+      "foreign": [],
+      "links": [
+        [
+          "white",
+          "white"
+        ],
+        [
+          "sticker",
+          "sticker"
+        ]
+      ]
+    },
+    {
+      "question": "Tell me about the sticker? And the cap?",
+      "ok": false,
+      "reasons": [
+        "more_than_one_question"
+      ],
+      "foreign": [],
+      "links": [
+        [
+          "sticker",
+          "sticker"
+        ],
+        [
+          "cap",
+          "cap"
+        ]
+      ]
+    },
+    {
+      "question": "",
+      "ok": false,
+      "reasons": [
+        "empty"
+      ],
+      "foreign": [],
+      "links": []
+    },
+    {
+      "question": "The car was speeding",
+      "ok": false,
+      "reasons": [
+        "not_a_question",
+        "foreign_words"
+      ],
+      "foreign": [
+        "speeding"
+      ],
+      "links": [
+        [
+          "car",
+          "car"
+        ]
+      ]
+    },
+    {
+      "question": "Didn't the driver look at you?",
+      "ok": false,
+      "reasons": [
+        "closed_form",
+        "foreign_words"
+      ],
+      "foreign": [
+        "Didn't",
+        "look"
+      ],
+      "links": [
+        [
+          "driver",
+          "driver"
+        ]
+      ]
+    },
+    {
+      "question": "Can you tell me more about the bridge?",
+      "ok": false,
+      "reasons": [
+        "closed_form"
+      ],
+      "foreign": [],
+      "links": [
+        [
+          "bridge",
+          "bridge"
+        ]
+      ]
+    },
+    {
+      "question": "What else do you remember about this part?",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": []
+    },
+    {
+      "question": "You said 2 people were in the car. Describe the 2 people.",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": [
+        [
+          "2 people",
+          "2 people"
+        ],
+        [
+          "car",
+          "car"
+        ],
+        [
+          "2 people",
+          "2 people"
+        ]
+      ]
+    },
+    {
+      "question": "Describe the 3 people in the car.",
+      "ok": false,
+      "reasons": [
+        "foreign_words"
+      ],
+      "foreign": [
+        "3"
+      ],
+      "links": [
+        [
+          "people in the car",
+          "people in the car"
+        ]
+      ]
+    },
+    {
+      "question": "You said “sticker”. Tell me everything you remember about that.",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": [
+        [
+          "sticker",
+          "sticker"
+        ]
+      ]
+    },
+    {
+      "question": "Tell me everything about the cyclist, the kerb, the bridge, the bakery, the crossing, the corner, the car, the driver, the cap, the sticker, the second, the back wheel and the rear window again.",
+      "ok": false,
+      "reasons": [
+        "too_long"
+      ],
+      "foreign": [],
+      "links": [
+        [
+          "cyclist",
+          "cyclist"
+        ],
+        [
+          "kerb",
+          "kerb"
+        ],
+        [
+          "bridge",
+          "bridge"
+        ],
+        [
+          "bakery",
+          "bakery"
+        ],
+        [
+          "crossing",
+          "crossing"
+        ],
+        [
+          "corner",
+          "corner"
+        ],
+        [
+          "car",
+          "car"
+        ],
+        [
+          "driver",
+          "driver"
+        ],
+        [
+          "cap",
+          "cap"
+        ],
+        [
+          "sticker",
+          "sticker"
+        ],
+        [
+          "second",
+          "second"
+        ],
+        [
+          "back wheel",
+          "back wheel"
+        ],
+        [
+          "rear window",
+          "rear window"
+        ]
+      ]
+    },
+    {
+      "question": "WHAT ELSE DO YOU REMEMBER ABOUT THE STICKER?",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": [
+        [
+          "STICKER",
+          "sticker"
+        ]
+      ]
+    },
+    {
+      "question": "Tell me about the stickers on the windows.",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": [
+        [
+          "stickers",
+          "sticker"
+        ],
+        [
+          "windows",
+          "window"
+        ]
+      ]
+    }
   ]
 }

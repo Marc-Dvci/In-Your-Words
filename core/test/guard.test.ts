@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
 import { checkQuestion, indexWitness, MAX_WORDS, REASON_TEXT, type Reason } from "../src/guard.js";
@@ -7,10 +7,17 @@ import { FUNCTION_WORDS, SCAFFOLD_WORDS } from "../src/words.js";
 
 interface Vectors {
   witness: string[];
-  cases: { question: string; ok: boolean; reasons: Reason[]; foreign: string[] }[];
+  cases: { question: string; ok: boolean; reasons: Reason[]; foreign: string[]; links?: [string, string][] }[];
 }
-const vectors = JSON.parse(readFileSync(new URL("../../spec/vectors/guard.json", import.meta.url), "utf8")) as Vectors;
+const file = new URL("../../spec/vectors/guard.json", import.meta.url);
+const vectors = JSON.parse(readFileSync(file, "utf8")) as Vectors;
 const witness = indexWitness(vectors.witness);
+const linksOf = (q: string): [string, string][] =>
+  checkQuestion(q, witness).links.map((l) => [l.question.text, vectors.witness[l.segment]!.slice(l.start, l.end)]);
+if (process.env.UPDATE_VECTORS) {
+  for (const c of vectors.cases) c.links = linksOf(c.question);
+  writeFileSync(file, JSON.stringify(vectors, null, 2) + "\n");
+}
 
 describe("the shared guard vectors", () => {
   it.each(vectors.cases)("decides $question", (c) => {
@@ -18,6 +25,7 @@ describe("the shared guard vectors", () => {
     expect(g.ok).toBe(c.ok);
     expect(g.reasons).toEqual(c.reasons);
     expect(g.foreign.map((f) => f.text)).toEqual(c.foreign);
+    expect(linksOf(c.question)).toEqual(c.links);
   });
 });
 
