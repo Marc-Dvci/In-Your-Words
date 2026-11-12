@@ -225,3 +225,43 @@
   border-radius: 3px;
   transition: background-color var(--t-mid) var(--ease-out);
 }
+
+.statement-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 56px;
+  margin-top: 28px;
+  align-items: start;
+}
+.source-text {
+  position: sticky;
+  top: 140px;
+  white-space: pre-wrap;
+  font-family: var(--serif);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  padding-left: 24px;
+  border-left: 1px solid var(--hair);
+}
+.source-text mark {
+  color: var(--ink);
+}
+@media (max-width: 860px) {
+  .statement-grid {
+    grid-template-columns: 1fr;
+  }
+  .source-text {
+    position: static;
+  }
+}
+@media print {
+  .topbar,
+  .actions,
+  .source-text,
+  .eyebrow,
+  .ground,
+  .watermark {
+    display: none !important;
+  }
+}

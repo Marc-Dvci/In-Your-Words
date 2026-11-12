@@ -11,6 +11,7 @@ import { Home } from "./screens/Home";
 import { Interview } from "./screens/Interview";
 import { Review, Sealed } from "./screens/Seal";
 import { Setup } from "./screens/Setup";
+import { Statement } from "./screens/Statement";
 import { Verify } from "./screens/Verify";
 import { demoSession } from "./demo/scene";
 
@@ -21,13 +22,14 @@ type Screen =
   | { name: "review" }
   | { name: "sealed"; record: SealRecord; account: SealedAccount }
   | { name: "verify" }
+  | { name: "statement"; account: SealedAccount; back: Screen }
   | { name: "send" }
   | { name: "receive" };
 
 const hasAnswers = (s: Session) => s.phases.some((p) => p.turns.some((t) => t.answer.trim()));
 
 export function App() {
-  const { replay } = useRuntime();
+  const { replay, live } = useRuntime();
   const [screen, setScreen] = useState<Screen>({ name: "home" });
   const [session, setSession] = useState<Session | null>(() => loadLocal<Session>());
   const [engine, setEngine] = useState<Engine | null>(null);
@@ -91,13 +93,14 @@ export function App() {
               record={screen.record}
               account={screen.account}
               onHandover={() => go({ name: "send" })}
-              onStatement={null}
+              onStatement={live ? () => go({ name: "statement", account: screen.account, back: screen }) : null}
               onRestart={() => {
                 setSession(null);
                 go({ name: "home" });
               }}
             />
           ) : null}
+          {screen.name === "statement" ? <Statement account={screen.account} back={() => go(screen.back)} /> : null}
           {screen.name === "verify" ? <Verify back={() => go({ name: "home" })} /> : null}
           {screen.name === "send" && session ? <Send session={session} back={() => go({ name: "home" })} /> : null}
           {screen.name === "receive" ? (

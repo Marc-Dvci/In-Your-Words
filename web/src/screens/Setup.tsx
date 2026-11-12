@@ -86,17 +86,17 @@ export function Setup({ begin, back }: { begin: (mode: Mode, engine: HybridEngin
             )}
           </div>
         ) : null}
-        {!here && status !== null ? (
+        {status !== null ? (
           <div class="choice">
             <Glyph kind="cloud" />
-            <h3>Questions written in the cloud</h3>
+            <h3>{here ? "Or: questions written in the cloud" : "Questions written in the cloud"}</h3>
             <p>
               Each answer is sent to Google's Gemini API through Firebase to write the next question, and the same check refuses any question that uses a word
               you did not say. This demo runs on Gemini's free tier: outside the EU, the UK and Switzerland, Google may use that text to improve its products.
               Use test details, not a real person's.
             </p>
             <div class="actions">
-              <button class="btn" type="button" onClick={() => live && begin("cloud", new HybridEngine(live, "cloud"))}>
+              <button class={here ? "link" : "btn"} type="button" onClick={() => live && begin("cloud", new HybridEngine(live, "cloud"))}>
                 I agree, use the cloud
               </button>
             </div>
