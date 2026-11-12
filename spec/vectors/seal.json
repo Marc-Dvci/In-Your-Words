@@ -1,0 +1,56 @@
+{
+  "about": "Canonical account, its SHA-256 and the rosette it draws. Both platforms must agree.",
+  "account": {
+    "v": 1,
+    "startedAt": "2026-11-12T18:52:00.000Z",
+    "mode": "on_device",
+    "phases": [
+      {
+        "id": "event",
+        "turns": [
+          {
+            "question": "In your own words, tell me everything you remember about what happened. Include every detail, even ones that seem small or unimportant.",
+            "source": "script",
+            "answer": "There was a sticker on the rear window, white, maybe round."
+          }
+        ]
+      },
+      {
+        "id": "people",
+        "turns": []
+      }
+    ]
+  },
+  "canonical": "{\"mode\":\"on_device\",\"phases\":[{\"id\":\"event\",\"turns\":[{\"answer\":\"There was a sticker on the rear window, white, maybe round.\",\"question\":\"In your own words, tell me everything you remember about what happened. Include every detail, even ones that seem small or unimportant.\",\"source\":\"script\"}]},{\"id\":\"people\",\"turns\":[]}],\"startedAt\":\"2026-11-12T18:52:00.000Z\",\"v\":1}",
+  "sha256": "492f4d7a02d5f017fc7cdb6ad2e778ee3d1df19c0174a6dc65fe8d5580e9cc50",
+  "rosette": [
+    {
+      "R": 61,
+      "r": 7,
+      "d": 11.126,
+      "turns": 7,
+      "extent": 0.8727272727272727
+    },
+    {
+      "R": 71,
+      "r": 14,
+      "d": 15.927,
+      "turns": 14,
+      "extent": 0.7545454545454545
+    },
+    {
+      "R": 65,
+      "r": 7,
+      "d": 10.311,
+      "turns": 7,
+      "extent": 0.6363636363636364
+    },
+    {
+      "R": 74,
+      "r": 11,
+      "d": 11.815,
+      "turns": 11,
+      "extent": 0.5181818181818182
+    }
+  ]
+}

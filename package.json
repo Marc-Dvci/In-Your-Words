@@ -1,0 +1,39 @@
+{
+  "name": "in-your-words",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A witness interview that can only ask about what you said",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "core",
+    "web"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w web",
+    "build": "npm run build -w web",
+    "test": "vitest run --coverage --sequence.shuffle",
+    "typecheck": "tsc -p core && tsc -p web --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.65.0",
+    "@preact/preset-vite": "2.10.6",
+    "@vitest/coverage-v8": "5.1.0",
+    "eslint": "10.14.0",
+    "fast-check": "4.10.2",
+    "globals": "17.14.0",
+    "prettier": "3.10.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  }
+}

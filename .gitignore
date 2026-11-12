@@ -21,3 +21,21 @@ web/dist*/
 data/cache/
 data/runs/
 *.log
+
+# Test output
+coverage/
+test-results/
+playwright-report/
+
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+*.iml
+android/app/google-services.json
+
+# Firebase
+.firebase/
+firebase-debug.log
