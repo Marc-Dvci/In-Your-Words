@@ -211,7 +211,19 @@ function highlight(text: string, foreign: string[]): preact.ComponentChildren[] 
 }
 
 /** The answer: a writing line that grows with the text. Ctrl+Enter sends. */
-export function Write({ onSend, onSkip, busy, placeholder }: { onSend: (t: string) => void; onSkip: () => void; busy: boolean; placeholder: string }) {
+export function Write({
+  onSend,
+  onSkip,
+  onHandover,
+  busy,
+  placeholder,
+}: {
+  onSend: (t: string) => void;
+  onSkip: () => void;
+  onHandover: () => void;
+  busy: boolean;
+  placeholder: string;
+}) {
   const [text, setText] = useState("");
   const [focus, setFocus] = useState(false);
   const ta = useRef<HTMLTextAreaElement>(null);
@@ -242,6 +254,8 @@ export function Write({ onSend, onSkip, busy, placeholder }: { onSend: (t: strin
         rows={1}
         placeholder={placeholder}
         aria-label="Your answer"
+        autocorrect="off"
+        autocapitalize="sentences"
         onInput={(e) => setText((e.target as HTMLTextAreaElement).value)}
         onFocus={() => setFocus(true)}
         onBlur={() => setFocus(false)}
@@ -259,6 +273,9 @@ export function Write({ onSend, onSkip, busy, placeholder }: { onSend: (t: strin
         </button>
         <button class="link" type="button" disabled={busy} onClick={onSkip}>
           Nothing more to add
+        </button>
+        <button class="link quiet" type="button" disabled={busy} onClick={onHandover}>
+          Continue on another device
         </button>
       </div>
     </div>

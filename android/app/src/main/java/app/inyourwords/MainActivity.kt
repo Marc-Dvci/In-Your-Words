@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -126,7 +128,15 @@ fun App() {
                     screen = Screen.Interview
                 }
                 Screen.Interview -> session?.let { current ->
-                    Interview(current, engine, config, onChange = { session = it }, onDone = { session = it; screen = Screen.Review })
+                    Interview(current, engine, config, onChange = { session = it }, onDone = { session = it; screen = Screen.Review }, onHandover = {
+                        val code = newCode()
+                        screen = Screen.Handover(null)
+                        scope.launch {
+                            val box = encrypt(code, sessionJson(current))
+                            Store.putHandover(recordId(code), box.iv, box.ct)
+                            screen = Screen.Handover(code)
+                        }
+                    })
                 }
                 Screen.Review -> session?.let { current ->
                     Review(current) {
@@ -162,7 +172,13 @@ fun Page(content: @Composable () -> Unit) {
 @Composable
 fun Mark() {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        app.inyourwords.ui.RosetteSeal("4fa7c01e93d25b68e0a1f4c7b3926d58c1e07a4f2b9d36e81c5a0f7d4e2b9c63", 22.dp, animate = false)
+        androidx.compose.foundation.Canvas(Modifier.size(24.dp)) {
+            val c = size.minDimension / 2
+            for (a in 0 until 6) rotate(a * 30f) {
+                drawOval(Ink.ink, topLeft = androidx.compose.ui.geometry.Offset(c - c * 0.9f, c - c * 0.33f), size = androidx.compose.ui.geometry.Size(c * 1.8f, c * 0.66f), style = androidx.compose.ui.graphics.drawscope.Stroke(1.2f))
+            }
+            drawCircle(Ink.green, c * 0.16f)
+        }
         Spacer(Modifier.padding(start = 10.dp))
         Text("IN YOUR WORDS", style = Type.eyebrow.copy(fontFamily = app.inyourwords.ui.Serif, color = Ink.ink, letterSpacing = Type.eyebrow.letterSpacing * 1.2f))
     }
@@ -255,7 +271,7 @@ fun Choice(title: String, body: String, action: @Composable () -> Unit) {
 }
 
 @Composable
-fun Interview(session: Session, engine: HybridEngine?, config: RuntimeConfig, onChange: (Session) -> Unit, onDone: (Session) -> Unit) {
+fun Interview(session: Session, engine: HybridEngine?, config: RuntimeConfig, onChange: (Session) -> Unit, onDone: (Session) -> Unit, onHandover: () -> Unit) {
     var draft by remember { mutableStateOf("") }
     var busy by remember { mutableStateOf(false) }
     var ms by remember { mutableStateOf<Long?>(null) }
@@ -312,6 +328,7 @@ fun Interview(session: Session, engine: HybridEngine?, config: RuntimeConfig, on
                 Pill("Next", enabled = !busy && draft.isNotBlank()) { send() }
                 Quiet("Nothing more to add") { if (!busy) advance(session) }
             }
+            TextButton(onClick = { if (!busy) onHandover() }) { Text("Continue on your laptop", style = Type.label) }
             if (!busy) GuardNote(prompt.rejected)
             Spacer(Modifier.height(48.dp))
         }

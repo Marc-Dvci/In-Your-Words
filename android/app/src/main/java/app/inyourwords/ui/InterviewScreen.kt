@@ -26,6 +26,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -134,11 +136,14 @@ fun Links(prompt: Prompt, geo: Geometry, modifier: Modifier) {
     val draw = remember(prompt.text) { Animatable(0f) }
     LaunchedEffect(prompt.text) { draw.snapTo(0f); kotlinx.coroutines.delay(650); draw.animateTo(1f, tween(900, easing = Engrave)) }
     Canvas(modifier) {
-        val root = geo.root ?: return@Canvas
+        val root = geo.root?.takeIf { it.isAttached } ?: return@Canvas
         val floor = (geo.accountBottom ?: return@Canvas) + 10f
         val (qc, ql) = geo.question ?: return@Canvas
+        // During a crossfade the old question's layout leaves the tree: draw only between attached layouts.
+        if (!qc.isAttached || ql.layoutInput.text.text != prompt.text) return@Canvas
         prompt.links.forEach { l ->
             val (sc, sl) = geo.segments[l.segment] ?: return@forEach
+            if (!sc.isAttached || l.end > sl.layoutInput.text.length) return@forEach
             val src: Rect = sl.getBoundingBox(l.start).let { a -> a.copy(right = sl.getBoundingBox((l.end - 1).coerceAtLeast(l.start)).right) }
             val dst: Rect = ql.getBoundingBox(l.question.start).let { a -> a.copy(right = ql.getBoundingBox((l.question.end - 1).coerceAtLeast(l.question.start)).right) }
             val x1 = root.localPositionOf(sc, Offset(src.center.x, 0f)).x
@@ -230,6 +235,8 @@ fun WriteLine(value: String, onValue: (String) -> Unit, placeholder: String, ena
                 enabled = enabled,
                 textStyle = Type.witness,
                 cursorBrush = SolidColor(Ink.green),
+                // The keyboard must never change the witness's words.
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, autoCorrectEnabled = false),
                 modifier = Modifier.fillMaxWidth().onFocusChanged { focused = it.isFocused },
             )
         }

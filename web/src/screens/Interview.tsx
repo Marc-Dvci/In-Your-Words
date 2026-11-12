@@ -20,6 +20,7 @@ interface Props {
   engine: Engine;
   onChange: (s: Session) => void;
   onDone: (s: Session) => void;
+  onHandover: () => void;
 }
 
 function segmentsOf(s: Session): Segment[] {
@@ -30,7 +31,7 @@ function startedAt(s: Session): string {
   return new Date(s.startedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-export function Interview({ session, engine, onChange, onDone }: Props) {
+export function Interview({ session, engine, onChange, onDone, onHandover }: Props) {
   const { config } = useRuntime();
   const [busy, setBusy] = useState(false);
   const [ms, setMs] = useState<number | null>(null);
@@ -101,6 +102,7 @@ export function Interview({ session, engine, onChange, onDone }: Props) {
         busy={busy}
         onSend={(t) => void send(t)}
         onSkip={skip}
+        onHandover={onHandover}
         placeholder={prompt.kind === "opening" ? `Write about ${phase.title.toLowerCase()} here…` : "Write your answer here…"}
       />
 

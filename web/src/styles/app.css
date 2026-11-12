@@ -412,6 +412,10 @@ a {
   border-color: var(--green);
   color: var(--green);
 }
+.link.quiet {
+  color: var(--steel);
+  border-bottom-color: var(--hair);
+}
 .actions {
   display: flex;
   align-items: center;

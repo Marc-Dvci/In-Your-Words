@@ -83,7 +83,13 @@ export function App() {
           ) : null}
           {screen.name === "setup" ? <Setup begin={begin} back={() => go({ name: "home" })} /> : null}
           {screen.name === "interview" && session && engine ? (
-            <Interview session={session} engine={engine} onChange={setSession} onDone={(s) => (setSession(s), go({ name: "review" }))} />
+            <Interview
+              session={session}
+              engine={engine}
+              onChange={setSession}
+              onDone={(s) => (setSession(s), go({ name: "review" }))}
+              onHandover={() => go({ name: "send" })}
+            />
           ) : null}
           {screen.name === "review" && session ? (
             <Review session={session} back={() => go({ name: "interview" })} onSealed={(record, account) => go({ name: "sealed", record, account })} />
