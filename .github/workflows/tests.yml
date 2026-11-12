@@ -70,6 +70,6 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install codespell==2.4.1
-      - run: codespell --skip "*.json,*.jsonl,package-lock.json,*.svg,*.png,*.pdf" --ignore-words-list "te,ue,crate,fo"
+      - run: codespell --skip "*.json,*.jsonl,package-lock.json,*.svg,*.png,*.pdf" --ignore-words-list "te,ue,crate,fo,optin"
       - run: python scripts/check_links.py
       - run: python scripts/check_placeholders.py
