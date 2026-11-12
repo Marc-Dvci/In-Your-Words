@@ -52,15 +52,12 @@ export function Statement({ account, back }: { account: SealedAccount; back: () 
           Turn your account into a statement.
         </h1>
         <p class="lede">
-          Your answers are sent to Google's Gemini API through Firebase, which drafts a first-person statement. Every sentence must cite the words you wrote,
-          and code removes any sentence that adds one.
-        </p>
-        <p class="body" style={{ marginTop: "14px" }}>
-          This demo runs on Gemini's free tier: outside the EU, the UK and Switzerland, Google may use the text to improve its products. Use test details.
+          Gemini drafts a first-person statement from your answers, through Firebase AI Logic. Every sentence cites the words you wrote, and code keeps
+          only the sentences built from them.
         </p>
         <div class="actions" style={{ marginTop: "32px" }}>
           <button class="btn green" type="button" disabled={state === "busy"} onClick={() => void run()}>
-            {state === "busy" ? "Drafting in the cloud…" : "I agree, draft it"}
+            {state === "busy" ? "Drafting in the cloud…" : "Draft my statement"}
           </button>
           <button class="link" type="button" onClick={back}>
             Back

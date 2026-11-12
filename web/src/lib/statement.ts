@@ -1,5 +1,5 @@
 /**
- * The formal statement, drafted in the cloud with the witness's consent, and read back by Gemini text-to-speech.
+ * The formal statement, drafted in the cloud when the witness asks for it, and read back by Gemini text-to-speech.
  * Code keeps only sentences whose every word comes from a quote the witness actually wrote.
  */
 

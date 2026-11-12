@@ -35,7 +35,7 @@ export function Home({ start, verify, receive, resume }: { start: () => void; ve
       </div>
       <p class="dot fixed home-note">
         {replay
-          ? "Demo mode: questions are replayed from recorded runs, and seals stay in this browser."
+          ? "Replaying an interview recorded on a real device."
           : store.where === "firestore"
             ? "Seals are kept by Firebase with the server's own time. Your words never are."
             : ""}

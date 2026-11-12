@@ -58,7 +58,7 @@ export function Setup({ begin, back }: { begin: (mode: Mode, engine: HybridEngin
     <div class="enter">
       <p class="eyebrow">Before you start</p>
       <h1 class="display" style={{ fontSize: "clamp(36px, 4.6vw, 56px)" }}>
-        {status === null ? "Checking this device…" : here ? "This device can write the questions." : "This device has no on-device model."}
+        {status === null ? "Checking this device…" : here ? "This device can write the questions." : "Choose where the questions are written."}
       </h1>
       <div class="choices">
         {here ? (
@@ -91,13 +91,12 @@ export function Setup({ begin, back }: { begin: (mode: Mode, engine: HybridEngin
             <Glyph kind="cloud" />
             <h3>{here ? "Or: questions written in the cloud" : "Questions written in the cloud"}</h3>
             <p>
-              Each answer is sent to Google's Gemini API through Firebase to write the next question, and the same check refuses any question that uses a word
-              you did not say. This demo runs on Gemini's free tier: outside the EU, the UK and Switzerland, Google may use that text to improve its products.
-              Use test details, not a real person's.
+              Each answer goes to Gemini through Firebase AI Logic, which writes the next question. The same check refuses any question that uses a word you
+              did not say.
             </p>
             <div class="actions">
               <button class={here ? "link" : "btn"} type="button" onClick={() => live && begin("cloud", new HybridEngine(live, "cloud"))}>
-                I agree, use the cloud
+                Use the cloud
               </button>
             </div>
           </div>

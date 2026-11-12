@@ -52,7 +52,7 @@ const jsonConstraint = {
 
 /**
  * The hybrid model. On a device with a model, `ONLY_ON_DEVICE`: the witness's words never leave, and a failure
- * never falls back to the cloud. Without one, `ONLY_IN_CLOUD`, and only after the witness agreed.
+ * never falls back to the cloud. Without one, `ONLY_IN_CLOUD`, when the witness chooses the cloud.
  */
 export function hybridModel(s: Services, where: "on_device" | "cloud"): GenerativeModel {
   return getGenerativeModel(s.ai, {

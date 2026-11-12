@@ -49,7 +49,7 @@ export function Account({ segments, links, arriving }: { segments: Segment[]; li
 const SOURCE_LABEL: Record<PromptSource, string> = {
   script: "From the interview script",
   on_device: "Asked on this device",
-  in_cloud: "Written in the cloud, with your consent",
+  in_cloud: "Written in the cloud",
   template: "A fixed question",
 };
 

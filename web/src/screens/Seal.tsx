@@ -147,7 +147,7 @@ export function Sealed({
         <p class="only">
           {store.where === "firestore"
             ? "Only this fingerprint left your device. Firebase recorded the time it arrived, and nobody can change that record."
-            : "Demo mode: the fingerprint is kept in this browser."}{" "}
+            : "The fingerprint is kept in this browser."}{" "}
           Change one character of the account and the fingerprint, and its rosette, change completely.
         </p>
         <div class="actions" style={{ marginTop: "30px" }}>

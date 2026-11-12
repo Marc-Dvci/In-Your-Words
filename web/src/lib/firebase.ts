@@ -4,7 +4,7 @@
  */
 
 import { initializeApp, type FirebaseApp } from "firebase/app";
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
 import { getFirestore, type Firestore } from "firebase/firestore";
 import { fetchAndActivate, getRemoteConfig, getValue } from "firebase/remote-config";
 import { getAI, GoogleAIBackend, type AI } from "firebase/ai";
@@ -55,7 +55,7 @@ async function start(): Promise<Services> {
   });
   if (env.VITE_APPCHECK_DEBUG) (self as unknown as { FIREBASE_APPCHECK_DEBUG_TOKEN: string | boolean }).FIREBASE_APPCHECK_DEBUG_TOKEN = env.VITE_APPCHECK_DEBUG === "true" ? true : env.VITE_APPCHECK_DEBUG;
   if (env.VITE_RECAPTCHA_SITE_KEY || env.VITE_APPCHECK_DEBUG) {
-    initializeAppCheck(app, { provider: new ReCaptchaV3Provider(env.VITE_RECAPTCHA_SITE_KEY ?? "debug"), isTokenAutoRefreshEnabled: true });
+    initializeAppCheck(app, { provider: new ReCaptchaEnterpriseProvider(env.VITE_RECAPTCHA_SITE_KEY ?? "debug"), isTokenAutoRefreshEnabled: true });
   }
   const rc = getRemoteConfig(app);
   rc.settings.minimumFetchIntervalMillis = 10 * 60 * 1000;
