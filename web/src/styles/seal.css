@@ -1,0 +1,227 @@
+/* ---------- review, seal, verify ---------- */
+.review {
+  max-width: 820px;
+  display: grid;
+  gap: 40px;
+}
+.review section {
+  display: grid;
+  gap: 14px;
+}
+.review h3 {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--steel);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.review h3::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--hair);
+}
+.review .q {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 17px;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+.review .a {
+  font-family: var(--serif);
+  font-size: 21px;
+  line-height: 1.6;
+}
+.tag {
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--steel);
+  white-space: nowrap;
+}
+.tag.on_device {
+  color: var(--green);
+}
+
+.sealed {
+  display: grid;
+  grid-template-columns: minmax(280px, 380px) 1fr;
+  gap: 64px;
+  align-items: center;
+  max-width: 1040px;
+}
+@media (max-width: 860px) {
+  .sealed {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+}
+.rosette {
+  width: 100%;
+  aspect-ratio: 1;
+  display: block;
+  overflow: visible;
+}
+.rosette .curve {
+  fill: none;
+  stroke-width: 0.5;
+  stroke-linejoin: round;
+}
+.rosette .ring {
+  fill: none;
+  stroke: var(--ink);
+}
+.rosette .hub {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 0.8;
+}
+.rosette.overlay .curve.again {
+  stroke: var(--red);
+  mix-blend-mode: multiply;
+}
+.rosette.match .curve.again {
+  stroke: var(--green);
+}
+
+.stime {
+  font-family: var(--mono);
+  font-size: clamp(40px, 5vw, 60px);
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.sdate {
+  color: var(--steel);
+  margin-top: 4px;
+}
+.hex {
+  margin-top: 26px;
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  word-spacing: 0.35em;
+  color: var(--ink);
+}
+.hex .ch {
+  display: inline-block;
+  min-width: 0.6em;
+}
+.hex .ch.settled {
+  animation: settle 380ms var(--ease-out);
+}
+@keyframes settle {
+  from {
+    color: var(--green);
+  }
+}
+.mrz {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  overflow: hidden;
+  color: var(--ink);
+  max-width: 100%;
+}
+.mrz span {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: type 1.6s steps(64) 1.8s both;
+  white-space: nowrap;
+}
+@keyframes type {
+  from {
+    width: 0;
+  }
+  to {
+    width: 64ch;
+  }
+}
+.only {
+  margin-top: 26px;
+  color: var(--steel);
+  font-size: 14px;
+}
+
+.drop {
+  display: grid;
+  place-items: center;
+  gap: 14px;
+  max-width: 560px;
+  aspect-ratio: 16 / 9;
+  border-radius: 28px;
+  border: 1.5px dashed var(--hair-strong);
+  color: var(--steel);
+  text-align: center;
+  padding: 24px;
+  cursor: pointer;
+  transition: border-color var(--t-mid) var(--ease-out), background-color var(--t-mid) var(--ease-out);
+}
+.drop.over {
+  border-color: var(--green);
+  background: rgba(29, 107, 91, 0.05);
+}
+.verdict {
+  font-family: var(--serif);
+  font-size: 30px;
+  font-weight: 600;
+}
+.verdict.bad {
+  color: var(--red);
+}
+.verdict.good {
+  color: var(--green);
+}
+
+.code {
+  font-family: var(--mono);
+  font-size: clamp(26px, 3.4vw, 40px);
+  letter-spacing: 0.08em;
+  margin: 18px 0 10px;
+}
+.code-input {
+  font-family: var(--mono);
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  border: 0;
+  border-bottom: 1px solid var(--hair-strong);
+  background: transparent;
+  padding: 8px 0;
+  width: min(100%, 560px);
+  outline: none;
+  text-transform: uppercase;
+}
+.code-input:focus {
+  border-color: var(--green);
+}
+
+.statement p {
+  font-family: var(--serif);
+  font-size: 21px;
+  line-height: 1.7;
+  max-width: 64ch;
+  cursor: default;
+  transition: color var(--t-mid) var(--ease-out);
+}
+.statement p + p {
+  margin-top: 10px;
+}
+.statement p:hover {
+  color: var(--green);
+}
+.quote-hl {
+  background: rgba(29, 107, 91, 0.14);
+  border-radius: 3px;
+  transition: background-color var(--t-mid) var(--ease-out);
+}

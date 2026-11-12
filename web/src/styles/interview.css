@@ -1,0 +1,305 @@
+/* ---------- the interview: the witness's words, the links, the next question ---------- */
+.stage {
+  position: relative;
+  max-width: 900px;
+}
+.links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.links path {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+.links circle {
+  fill: var(--green);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* the account so far */
+.account {
+  margin-bottom: 8px;
+}
+.account .eyebrow {
+  display: block;
+  margin-bottom: 14px;
+}
+.answer-text {
+  font-family: var(--serif);
+  font-size: 23px;
+  line-height: 1.66;
+  color: var(--ink);
+  max-width: 62ch;
+}
+.answer-text + .answer-text {
+  margin-top: 6px;
+}
+.answer-text.past {
+  color: var(--ink-soft);
+  font-size: 19px;
+}
+.answer-text .src {
+  color: var(--green);
+  background:
+    linear-gradient(var(--green), var(--green)) 0 100% / 0% 1px no-repeat,
+    linear-gradient(var(--green), var(--green)) 0 calc(100% - 3px) / 0% 1px no-repeat;
+  padding-bottom: 5px;
+  transition: background-size var(--t-slow) var(--ease-out);
+}
+.answer-text .src.drawn {
+  background-size: 100% 1px, 100% 1px;
+}
+.answer-text.arrive {
+  animation: arrive 640ms var(--ease-out) both;
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+    filter: blur(2px);
+  }
+}
+.empty-account {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 19px;
+  color: var(--steel);
+}
+
+/* the question */
+.qwrap {
+  margin-top: 112px;
+}
+.qwrap.first {
+  margin-top: 0;
+}
+.question {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(30px, 3.4vw, 42px);
+  line-height: 1.24;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  max-width: 30ch;
+}
+.question.opening {
+  font-weight: 400;
+  font-size: clamp(26px, 2.8vw, 34px);
+  max-width: 34ch;
+}
+.question .wd {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: translateY(0.35em);
+  filter: blur(3px);
+  animation: word 560ms var(--ease-out) forwards;
+}
+.question .g {
+  font-weight: inherit;
+  color: var(--green);
+  transition: text-shadow var(--t-mid) var(--ease-out);
+}
+.question .g:hover {
+  text-shadow: 0 0 18px var(--green-glow);
+}
+@keyframes word {
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+.qmeta {
+  margin-top: 18px;
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* thinking: an engraving line that travels while the model writes */
+.thinking {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 60px;
+  color: var(--steel);
+  font-size: 15px;
+}
+.thinking svg {
+  width: 180px;
+  height: 28px;
+}
+.thinking path {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 1;
+  stroke-dasharray: 6 10;
+  animation: travel 1.1s linear infinite;
+}
+.thinking path + path {
+  stroke: var(--ink);
+  opacity: 0.4;
+  animation-duration: 1.7s;
+  animation-direction: reverse;
+}
+@keyframes travel {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+/* the answer: a writing line, not a box */
+.write {
+  margin-top: 38px;
+  max-width: 62ch;
+}
+.write textarea {
+  display: block;
+  width: 100%;
+  min-height: 56px;
+  resize: none;
+  border: 0;
+  background: transparent;
+  font-family: var(--serif);
+  font-size: 23px;
+  line-height: 1.6;
+  color: var(--ink);
+  padding: 6px 0 12px;
+  outline: none;
+  transition: height var(--t-mid) var(--ease-out);
+}
+.write textarea::placeholder {
+  color: rgba(94, 107, 120, 0.7);
+  font-style: italic;
+}
+.write .line {
+  height: 1px;
+  background: var(--hair-strong);
+  position: relative;
+  overflow: hidden;
+}
+.write .line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-slow) var(--ease-out);
+}
+.write.focus .line::after {
+  transform: scaleX(1);
+}
+.write .actions {
+  margin-top: 22px;
+}
+.write .hint {
+  font-size: 13px;
+  color: var(--steel);
+}
+
+/* checked before you saw it */
+.guard {
+  margin-top: 56px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+  max-width: 900px;
+  font-size: 14px;
+  color: var(--steel);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: rise var(--t-slow) var(--ease-out) both;
+}
+.guard .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  align-items: baseline;
+}
+.guard .cand {
+  font-family: var(--serif);
+  font-size: 16px;
+  color: var(--ink-soft);
+}
+.guard .foreign {
+  color: var(--red);
+  background: linear-gradient(var(--red), var(--red)) 0 55% / 0% 1.5px no-repeat;
+  animation: strike 700ms var(--ease-out) 500ms forwards;
+}
+@keyframes strike {
+  to {
+    background-size: 100% 1.5px;
+  }
+}
+.guard .why {
+  color: var(--red);
+}
+
+/* ---------- setup ---------- */
+.choices {
+  display: grid;
+  gap: 34px;
+  max-width: 760px;
+  margin-top: 46px;
+}
+.choice {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 4px 18px;
+  align-items: start;
+}
+.choice h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 22px;
+}
+.choice p {
+  grid-column: 2;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.choice .actions {
+  grid-column: 2;
+  margin-top: 12px;
+}
+.choice .glyph {
+  grid-row: span 3;
+  width: 40px;
+  height: 40px;
+}
+.progress {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--steel);
+}
+.progress .track {
+  flex: 1;
+  max-width: 320px;
+  height: 3px;
+  background: var(--hair);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress .track i {
+  display: block;
+  height: 100%;
+  background: var(--green);
+  transform-origin: left;
+  transition: transform 400ms var(--ease-out);
+}

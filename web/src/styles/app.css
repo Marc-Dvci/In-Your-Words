@@ -1,0 +1,507 @@
+@import "@fontsource/source-serif-4/400.css";
+@import "@fontsource/source-serif-4/600.css";
+@import "@fontsource/source-serif-4/400-italic.css";
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+
+/* Intaglio: one engraving ink on cool paper, security green for the witness's own words. */
+:root {
+  --paper: #f6f8fa;
+  --paper-deep: #edf1f5;
+  --ink: #12324b;
+  --ink-soft: rgba(18, 50, 75, 0.62);
+  --green: #1d6b5b;
+  --green-glow: rgba(29, 107, 91, 0.32);
+  --steel: #5e6b78;
+  --red: #b23a2e;
+  --hair: rgba(18, 50, 75, 0.14);
+  --hair-strong: rgba(18, 50, 75, 0.28);
+
+  --serif: "Source Serif 4", Georgia, serif;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fast: 180ms;
+  --t-mid: 420ms;
+  --t-slow: 900ms;
+
+  color-scheme: light;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --t-fast: 1ms;
+    --t-mid: 1ms;
+    --t-slow: 1ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(29, 107, 91, 0.18);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--green);
+  text-underline-offset: 4px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* ---------- ground: a pool of light and a faint engraved rosette, never a box ---------- */
+.ground {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 900px 560px at 32% 22%, rgba(29, 107, 91, 0.06), transparent 70%),
+    radial-gradient(ellipse 1100px 700px at 80% 110%, rgba(18, 50, 75, 0.05), transparent 70%);
+}
+.watermark {
+  position: fixed;
+  right: -180px;
+  top: 50%;
+  width: 720px;
+  height: 720px;
+  margin-top: -360px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.07;
+  animation: turn 240s linear infinite;
+}
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 56px 96px;
+}
+@media (max-width: 720px) {
+  .shell {
+    padding: 0 20px 72px;
+  }
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: linear-gradient(to bottom, rgba(246, 248, 250, 0.96) 0%, rgba(246, 248, 250, 0.9) 72%, rgba(246, 248, 250, 0) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%);
+  view-transition-name: top;
+}
+.top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 56px 30px;
+}
+@media (max-width: 720px) {
+  .top {
+    padding: 18px 20px 20px;
+  }
+}
+.shell > main {
+  padding-top: 40px;
+}
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.mark svg {
+  transition: transform var(--t-slow) var(--ease-out);
+}
+.mark:hover svg {
+  transform: rotate(60deg);
+}
+
+/* the phase rail, with road-stud bars over each name */
+.rail {
+  display: flex;
+  gap: 22px;
+  list-style: none;
+}
+.rail li {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  min-width: 64px;
+  font-size: 13px;
+  color: var(--steel);
+  transition: color var(--t-mid) var(--ease-out);
+}
+.rail .bar {
+  position: relative;
+  height: 4px;
+  width: 64px;
+  border-radius: 2px;
+  background: rgba(18, 50, 75, 0.14);
+  overflow: hidden;
+}
+.rail .bar i {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--t-slow) var(--ease-out), background-color var(--t-mid) var(--ease-out);
+}
+.rail li.done .bar i {
+  transform: scaleX(1);
+  background: rgba(18, 50, 75, 0.7);
+}
+.rail li.on {
+  color: var(--ink);
+}
+.rail li.on .bar {
+  overflow: visible;
+}
+.rail li.on .bar i {
+  transform: scaleX(1);
+  background: var(--green);
+  box-shadow: 0 0 14px var(--green-glow);
+  animation: breathe 2.8s var(--ease-in-out) infinite;
+}
+@keyframes breathe {
+  50% {
+    box-shadow: 0 0 22px rgba(29, 107, 91, 0.5);
+  }
+}
+.rail .num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
+@media (max-width: 960px) {
+  .top {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .rail {
+    gap: 10px;
+    width: 100%;
+  }
+  .rail li {
+    flex: 1;
+    min-width: 0;
+  }
+  .rail .bar {
+    width: 100%;
+  }
+  .rail .name {
+    display: none;
+  }
+}
+
+/* ---------- type ---------- */
+.eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+.eyebrow .sep {
+  margin: 0 0.6em;
+}
+.display {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(44px, 6vw, 76px);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+.lede {
+  font-family: var(--serif);
+  font-size: clamp(20px, 2.2vw, 25px);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 44ch;
+}
+.display + .lede {
+  margin-top: 26px;
+}
+.home .eyebrow {
+  margin-bottom: 22px;
+}
+.home .actions {
+  margin-top: 44px;
+}
+.home-note {
+  margin-top: 26px;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 36px;
+  margin-top: 96px;
+  max-width: 980px;
+  list-style: none;
+}
+.steps li {
+  display: grid;
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+}
+.steps b {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 20px;
+}
+.steps span {
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-size: 15px;
+}
+.steps .n {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--green);
+}
+@media (max-width: 860px) {
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-top: 64px;
+  }
+}
+.body {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+/* ---------- buttons: ink pills and quiet text links ---------- */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 500;
+  font-size: 16px;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform var(--t-fast) var(--ease-out),
+    box-shadow var(--t-mid) var(--ease-out),
+    background-color var(--t-mid) var(--ease-out);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 8px 24px rgba(18, 50, 75, 0.18);
+}
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.18) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 900ms var(--ease-out);
+}
+.btn:hover::after {
+  transform: translateX(120%);
+}
+.btn:hover {
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 14px 32px rgba(18, 50, 75, 0.24);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn.green {
+  background: var(--green);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 8px 24px rgba(29, 107, 91, 0.26);
+}
+.btn kbd {
+  font-family: var(--mono);
+  font-size: 11px;
+  opacity: 0.7;
+}
+.link {
+  background: none;
+  border: 0;
+  padding: 6px 2px;
+  color: var(--ink);
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 1px solid var(--hair-strong);
+  transition: border-color var(--t-mid) var(--ease-out), color var(--t-mid) var(--ease-out);
+}
+.link:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+}
+
+/* ---------- small status line with a dot ---------- */
+.dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 14px;
+  color: var(--steel);
+}
+.dot::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 0 var(--green-glow);
+}
+.dot.live::before {
+  animation: ping 1.8s var(--ease-out) infinite;
+}
+.dot.cloud::before {
+  background: var(--ink);
+}
+.dot.fixed::before {
+  background: var(--steel);
+}
+@keyframes ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(29, 107, 91, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(29, 107, 91, 0);
+  }
+}
+
+/* ---------- screen enter ---------- */
+.enter > * {
+  animation: rise var(--t-slow) var(--ease-out) both;
+}
+.enter > *:nth-child(2) {
+  animation-delay: 70ms;
+}
+.enter > *:nth-child(3) {
+  animation-delay: 140ms;
+}
+.enter > *:nth-child(4) {
+  animation-delay: 210ms;
+}
+.enter > *:nth-child(5) {
+  animation-delay: 280ms;
+}
+.enter > *:nth-child(6) {
+  animation-delay: 350ms;
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(4px);
+  }
+}
+
+/* view transitions between screens */
+::view-transition-old(root) {
+  animation: vt-out 260ms var(--ease-in-out) both;
+}
+::view-transition-new(root) {
+  animation: vt-in 520ms var(--ease-out) both;
+}
+@keyframes vt-out {
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+    filter: blur(3px);
+  }
+}
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(3px);
+  }
+}
+::view-transition-group(top) {
+  animation-duration: 520ms;
+  animation-timing-function: var(--ease-out);
+}

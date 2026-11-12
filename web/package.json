@@ -10,6 +10,9 @@
     "preview": "vite preview --port 4173 --strictPort"
   },
   "dependencies": {
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/ibm-plex-sans": "5.3.0",
+    "@fontsource/source-serif-4": "5.3.1",
     "@iyw/core": "1.0.0",
     "firebase": "13.3.0",
     "preact": "11.2.0"

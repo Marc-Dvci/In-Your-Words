@@ -3,25 +3,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F6F8FA" />
     <title>In Your Words</title>
-    <meta name="description" content="A witness interview that can only ask about what you said" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <!-- The card a pasted link shows (Devpost, Discord, LinkedIn): og:image must be an absolute URL. -->
+    <meta name="description" content="A witness interview that can only ask about what you said. Questions are written on your device, and only a fingerprint of your account is sealed." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="In Your Words" />
-    <meta property="og:description" content="A witness interview that can only ask about what you said" />
-    <meta property="og:image" content="{{DEMO_URL}}og-card.png" />
+    <meta property="og:description" content="A witness interview that can only ask about what you said." />
+    <meta property="og:image" content="%VITE_PUBLIC_URL%og-card.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <main>
-      <h1>In Your Words</h1>
-      <p class="lede">A witness interview that can only ask about what you said</p>
-      <button id="run" type="button">Run the example</button>
-      <pre id="out" aria-live="polite"></pre>
-      <p class="foot" id="status"></p>
-    </main>
-    <script src="app.js"></script>
+    <div id="app"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

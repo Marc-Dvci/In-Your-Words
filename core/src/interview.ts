@@ -111,11 +111,11 @@ export function phaseIndex(session: Session): number {
 }
 
 /** True when the current phase may still ask a follow-up about the last answer. */
-export function wantsFollowup(session: Session): boolean {
+export function wantsFollowup(session: Session, max = MAX_FOLLOWUPS): boolean {
   const phase = currentPhase(session);
   const last = phase.turns[phase.turns.length - 1]!;
   const followups = phase.turns.filter((t) => t.prompt.kind === "followup").length;
-  return last.answer.trim().length > 0 && followups < MAX_FOLLOWUPS && tokenize(last.answer).length >= 4;
+  return last.answer.trim().length > 0 && followups < max && tokenize(last.answer).length >= 4;
 }
 
 export function answer(session: Session, text: string): Session {

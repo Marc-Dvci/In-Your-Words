@@ -1,0 +1,37 @@
+rules_version = '2';
+
+// A seal is a fingerprint and the server's own time, written once and never changed. No words are ever stored.
+// A handover is ciphertext the server cannot read, kept for 30 minutes and opened once.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /seals/{fp} {
+      allow get: if fp.matches('^[0-9a-f]{64}$');
+      allow list: if false;
+      allow create: if fp.matches('^[0-9a-f]{64}$')
+        && request.resource.data.keys().hasOnly(['v', 'createdAt', 'mode', 'client'])
+        && request.resource.data.v == 1
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.mode in ['on_device', 'cloud', 'templates']
+        && request.resource.data.client in ['web', 'android'];
+      allow update, delete: if false;
+    }
+
+    match /handovers/{id} {
+      allow get: if id.matches('^[0-9a-f]{32}$') && request.time < resource.data.expiresAt;
+      allow list: if false;
+      allow create: if id.matches('^[0-9a-f]{32}$')
+        && request.resource.data.keys().hasOnly(['iv', 'ct', 'createdAt', 'expiresAt'])
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.expiresAt is timestamp
+        && request.resource.data.expiresAt <= request.time + duration.value(31, 'm')
+        && request.resource.data.iv is string && request.resource.data.iv.size() <= 32
+        && request.resource.data.ct is string && request.resource.data.ct.size() <= 200000;
+      allow delete: if id.matches('^[0-9a-f]{32}$');
+      allow update: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -106,7 +106,7 @@ describe("deciding what the witness sees", () => {
   it("shows an accepted proposal, labelled with where it ran, with its links", () => {
     const d = decide(started(), { anchor: "a sticker", question: "You said there was a sticker on the rear window. Tell me everything you remember about it." }, "on_device");
     expect(d.prompt.source).toBe("on_device");
-    expect(d.prompt.links.length).toBe(3);
+    expect(d.prompt.links.map((l) => l.question.text)).toEqual(["sticker on the rear window"]);
     expect(d.prompt.rejected).toEqual([]);
   });
 

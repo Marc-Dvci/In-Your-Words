@@ -95,24 +95,14 @@ export function checkQuestion(question: string, witness: WitnessIndex): GuardRes
   }
 
   const foreign: Span[] = [];
-  const links: Link[] = [];
   for (const t of tokens) {
     if (isFreeWord(t.lower)) continue;
     const isNumber = /^\p{N}+$/u.test(t.lower);
     const known = isNumber ? witness.numbers.has(t.lower) : witness.stems.has(t.stem);
-    if (!known) {
-      foreign.push({ text: t.text, start: t.start, end: t.end });
-      continue;
-    }
-    const source = [...witness.tokens].reverse().find((w) => (isNumber ? w.lower === t.lower : w.stem === t.stem))!;
-    links.push({
-      question: { text: t.text, start: t.start, end: t.end },
-      segment: source.segment,
-      start: source.start,
-      end: source.end,
-    });
+    if (!known) foreign.push({ text: t.text, start: t.start, end: t.end });
   }
   if (foreign.length) reasons.add("foreign_words");
+  const links = phraseLinks(q, tokens, witness);
 
   const ordered: Reason[] = [
     "empty",
@@ -126,6 +116,51 @@ export function checkQuestion(question: string, witness: WitnessIndex): GuardRes
   ];
   const list = ordered.filter((r) => reasons.has(r));
   return { ok: list.length === 0, question: q, reasons: list, foreign, links };
+}
+
+const same = (a: Token, b: Token): boolean => (/^\p{N}+$/u.test(a.lower) ? a.lower === b.lower : a.stem === b.stem);
+
+/**
+ * Links each run of the witness's words in the question to the longest matching run in the witness's account, so
+ * "dark estate car came round" points at the one place it was said. Runs start and end on content words. Among
+ * equally long runs, the most recent answer wins, and within it the first mention.
+ */
+function phraseLinks(q: string, tokens: Token[], witness: WitnessIndex): Link[] {
+  const links: Link[] = [];
+  const bySegment = witness.segments.map((_, s) => witness.tokens.filter((t) => t.segment === s));
+  let i = 0;
+  while (i < tokens.length) {
+    const t = tokens[i]!;
+    if (isFreeWord(t.lower)) {
+      i++;
+      continue;
+    }
+    let best: { s: number; j: number; k: number } | null = null;
+    for (let s = bySegment.length - 1; s >= 0; s--) {
+      const seg = bySegment[s]!;
+      for (let j = 0; j < seg.length; j++) {
+        if (!same(t, seg[j]!)) continue;
+        let k = 1;
+        while (i + k < tokens.length && j + k < seg.length && same(tokens[i + k]!, seg[j + k]!)) k++;
+        while (k > 1 && isFreeWord(tokens[i + k - 1]!.lower)) k--;
+        if (!best || k > best.k) best = { s, j, k };
+      }
+    }
+    if (!best) {
+      i++;
+      continue;
+    }
+    const seg = bySegment[best.s]!;
+    const qEnd = tokens[i + best.k - 1]!.end;
+    links.push({
+      question: { text: q.slice(t.start, qEnd), start: t.start, end: qEnd },
+      segment: best.s,
+      start: seg[best.j]!.start,
+      end: seg[best.j + best.k - 1]!.end,
+    });
+    i += best.k;
+  }
+  return links;
 }
 
 /** One sentence a person can read, for each reason a question was refused. */

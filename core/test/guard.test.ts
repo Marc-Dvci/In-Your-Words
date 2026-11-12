@@ -22,14 +22,24 @@ describe("the shared guard vectors", () => {
 });
 
 describe("provenance links", () => {
-  it("ties each content word to the place the witness said it", () => {
+  it("ties a run of the witness's words to the place the witness said it", () => {
     const g = checkQuestion("You said there was a sticker on the rear window. Tell me everything you remember about it.", witness);
     const linked = g.links.map((l) => [l.question.text, vectors.witness[l.segment]!.slice(l.start, l.end)]);
+    expect(linked).toEqual([["sticker on the rear window", "sticker on the rear window"]]);
+  });
+
+  it("links a run of the witness's words to the one place the whole run was said", () => {
+    const g = checkQuestion("You said dark estate car came round. Tell me everything you remember about how it came round.", witness);
+    const linked = g.links.map((l) => [l.question.text, vectors.witness[l.segment]!.slice(l.start, l.end)]);
     expect(linked).toEqual([
-      ["sticker", "sticker"],
-      ["rear", "rear"],
-      ["window", "window"],
+      ["dark estate car came round", "dark estate car came round"],
+      ["came round", "came round"],
     ]);
+  });
+
+  it("never starts or ends a linked run on a function word", () => {
+    const g = checkQuestion("Tell me about the car and the bridge.", witness);
+    expect(g.links.map((l) => l.question.text)).toEqual(["car", "bridge"]);
   });
 
   it("links an inflected word to the form the witness used", () => {
