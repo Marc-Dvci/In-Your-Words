@@ -8,7 +8,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-1D6B5B)](LICENSE)
 [![Live site](https://img.shields.io/badge/live-in--your--words--2026.web.app-12324B)](https://in-your-words-2026.web.app)
 
-[![In Your Words: the interview, with the witness's words tied to the next question](docs/hero.png)](https://in-your-words-2026.web.app)
+[![Watch the film: In Your Words, the interview, the guard and the seal](docs/film_thumbnail.jpg)](https://youtu.be/6XXSv3leFQE)
 
 **In Your Words helps someone who has just seen something happen record it while it is fresh. Gemini Nano writes
 each follow-up question on their device, code refuses any question that uses a word they never said, and a
@@ -21,7 +21,7 @@ fingerprint of the account is sealed with a time anyone can check.**
 |---|---|---|---|
 | [in-your-words-2026.web.app](https://in-your-words-2026.web.app) | Web (Chrome) and Android | Firebase AI Logic hybrid inference, App Check, Firestore, Remote Config, Hosting | Asked plainly, Gemini Nano put a word in the witness's mouth in 79 of 80 follow-ups; with In Your Words, none reached the witness |
 
-[For judges](#for-judges) · [See it work](#see-it-work) · [How it works](#how-it-works) · [Firebase](#how-firebase-is-used) ·
+[Film](https://youtu.be/6XXSv3leFQE) · [For judges](#for-judges) · [See it work](#see-it-work) · [How it works](#how-it-works) · [Firebase](#how-firebase-is-used) ·
 [Results](#results) · [Run it](#run-it)
 
 ## For judges
@@ -34,6 +34,8 @@ fingerprint of the account is sealed with a time anyone can check.**
 | Quality of the idea | [How it works](#how-it-works): the device model writes, deterministic code decides, and only a fingerprint leaves |
 
 ## See it work
+
+[![In Your Words: the interview, with the witness's words tied to the next question](docs/hero.png)](https://in-your-words-2026.web.app)
 
 <table>
 <tr>

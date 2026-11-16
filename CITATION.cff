@@ -10,7 +10,7 @@ authors:
   - family-names: Donovici
     given-names: Marc
 version: 1.0.0
-date-released: "2026-11-30"
+date-released: "2026-11-16"
 license: Apache-2.0
 repository-code: "https://github.com/Marc-Dvci/In-Your-Words"
 url: "https://in-your-words-2026.web.app"
