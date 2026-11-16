@@ -32,8 +32,19 @@ export function Interview({ session, engine, onChange, onDone, onHandover }: Pro
   const segments = segmentsOf(session);
   const where = engine.kind === "templates" ? null : engine.kind === "cloud" ? "cloud" : engine.kind === "replay" ? "replay" : "on_device";
 
+  // Centres the question, but keeps the witness's phrase it quotes below the top bar, and the answer field on screen.
   useEffect(() => {
-    qref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const q = qref.current?.getBoundingClientRect();
+    if (!q) return;
+    let top = scrollY + q.top + q.height / 2 - innerHeight / 2;
+    const phrases = busy ? [] : [...(stage.current?.querySelectorAll<HTMLElement>(".src") ?? [])];
+    const field = stage.current?.querySelector("textarea")?.getBoundingClientRect();
+    if (phrases.length && field) {
+      const bar = document.querySelector(".topbar")?.getBoundingClientRect().bottom ?? 0;
+      const phrase = Math.min(...phrases.map((e) => e.getBoundingClientRect().top));
+      top = Math.max(Math.min(top, scrollY + phrase - bar - 24), scrollY + field.bottom - innerHeight + 24);
+    }
+    scrollTo({ top: Math.max(0, top), behavior: "smooth" });
   }, [prompt.text, busy]);
 
   const advance = (s: Session) => {
