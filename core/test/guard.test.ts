@@ -80,6 +80,22 @@ describe("question form", () => {
     expect(checkQuestion("You said cap. Was it the driver's cap?", witness).reasons).toContain("closed_form");
   });
 
+  it("refuses a yes-or-no question after a comma, a dash or a joining word", () => {
+    for (const q of [
+      "You said the driver wore a cap, was it the driver's cap?",
+      "Tell me, did the car slow?",
+      "You said the car slowed - did the car slow?",
+      "And was the car fast?",
+      "So then did the driver drive off?",
+    ])
+      expect(checkQuestion(q, witness).reasons, q).toContain("closed_form");
+  });
+
+  it("accepts an open question with a clause before it", () => {
+    expect(checkQuestion("When the car slowed, what did the driver do?", witness).ok).toBe(true);
+    expect(checkQuestion("What did the driver do, and then?", witness).ok).toBe(true);
+  });
+
   it(`accepts ${MAX_WORDS} words and refuses ${MAX_WORDS + 1}`, () => {
     const at = `Tell me about ${Array.from({ length: MAX_WORDS - 3 }, () => "the").join(" ")}.`;
     expect(tokenize(at)).toHaveLength(MAX_WORDS);
@@ -117,6 +133,12 @@ describe("the stemmer", () => {
     ["red", "red"],
     ["speed", "speed"],
     ["2", "2"],
+    ["hated", "hate"],
+    ["coping", "cope"],
+    ["driving", "drive"],
+    ["scarred", "scar"],
+    ["crying", "cry"],
+    ["played", "play"],
   ])("folds %s to %s", (word, expected) => {
     expect(stem(word)).toBe(expected);
   });
@@ -124,6 +146,22 @@ describe("the stemmer", () => {
   it("never folds two different short words together", () => {
     expect(stem("cap")).not.toBe(stem("cat"));
     expect(stem("red")).not.toBe(stem("read"));
+  });
+
+  it("never folds an -ed or -ing form into a shorter word", () => {
+    const pairs = [
+      ["cared", "car"],
+      ["caring", "car"],
+      ["coping", "cop"],
+      ["hated", "hat"],
+      ["scared", "scar"],
+      ["staring", "star"],
+      ["riding", "rid"],
+      ["hoping", "hop"],
+      ["taped", "tap"],
+      ["striped", "strip"],
+    ];
+    for (const [form, word] of pairs) expect(stem(form!), `${form} and ${word}`).not.toBe(stem(word!));
   });
 });
 

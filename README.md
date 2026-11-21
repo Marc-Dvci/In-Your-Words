@@ -153,7 +153,7 @@ Firebase AI Logic model. The held-out 80 were read for the first time by this ru
 - **On-device is fast enough to talk to.** Gemini Nano wrote a question in 2.4 s at the median on this desktop, with
   a 90th percentile of 2.8 s.
 
-Tests: 97 unit tests (core and evaluation) in random order, covering 99.6 % of the core's lines and 97.0 % of its branches, 59 Android unit tests against the shared vectors, and 5
+Tests: 111 unit tests (core and evaluation) in random order, covering 99.6 % of the core's lines and 97.3 % of its branches, 64 Android unit tests against the shared vectors, and 5
 browser tests on the built app with WCAG 2.2 AA checks. Rerun the scoring with `npx vitest run eval`.
 
 Every question in this README and the film was written by Gemini Nano or Gemini through Firebase AI Logic. The

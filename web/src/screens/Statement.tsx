@@ -1,4 +1,4 @@
-import { useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import type { SealedAccount, TraceResult } from "@iyw/core";
 import { draft, speak } from "../lib/statement";
 import { useRuntime } from "../lib/runtime";
@@ -28,17 +28,36 @@ export function Statement({ account, back }: { account: SealedAccount; back: () 
     }
   };
 
+  // Each reading gets a number. Stopping, leaving the screen, or a reading that ends moves it on, so audio that
+  // arrives after the witness pressed "Stop reading" never starts.
+  const turn = useRef(0);
+  const halt = () => {
+    turn.current++;
+    stop.current?.();
+    stop.current = null;
+  };
+  useEffect(() => halt, []);
+
   const read = async () => {
     if (!live || !out) return;
     if (reading) {
-      stop.current?.();
+      halt();
       setReading(false);
       return;
     }
+    const mine = ++turn.current;
+    setError("");
     setReading(true);
     try {
-      stop.current = await speak(live, out.result.kept.map((k) => k.text).join(" "));
+      const end = await speak(live, out.result.kept.map((k) => k.text).join(" "), () => {
+        if (turn.current !== mine) return;
+        stop.current = null;
+        setReading(false);
+      });
+      if (turn.current === mine) stop.current = end;
+      else end();
     } catch (e) {
+      if (turn.current !== mine) return;
       setError((e as Error).message);
       setReading(false);
     }

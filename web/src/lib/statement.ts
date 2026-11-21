@@ -37,8 +37,8 @@ export async function draft(s: Services, a: SealedAccount): Promise<{ text: stri
   return { text, result: trace(text, parsed.sentences ?? []), ms };
 }
 
-/** Reads the kept sentences aloud. Returns a function that stops playback. */
-export async function speak(s: Services, text: string): Promise<() => void> {
+/** Reads the kept sentences aloud and calls `onEnd` when the reading finishes. Returns a function that stops it. */
+export async function speak(s: Services, text: string, onEnd: () => void): Promise<() => void> {
   const model = getGenerativeModel(s.ai, {
     model: s.config.ttsModel,
     generationConfig: {
@@ -59,9 +59,15 @@ export async function speak(s: Services, text: string): Promise<() => void> {
   const src = ctx.createBufferSource();
   src.buffer = buf;
   src.connect(ctx.destination);
+  const close = () => void ctx.close().catch(() => undefined);
+  src.onended = () => {
+    close();
+    onEnd();
+  };
   src.start();
   return () => {
+    src.onended = null;
     src.stop();
-    void ctx.close();
+    close();
   };
 }

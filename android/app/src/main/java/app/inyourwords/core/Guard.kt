@@ -65,6 +65,9 @@ private val SENTENCE_BREAK = Regex("(?<=[.?!])[$JS_WHITESPACE]+")
 private val WHITESPACE_RUN = Regex("[$JS_WHITESPACE]+")
 private val QUOTED = Regex("[\"“]([^\"”]+)[\"”]")
 
+/** Where a new clause can start inside a sentence: a comma, semicolon, colon, or dash. */
+private val CLAUSE_BREAK = Regex("[,;:–—]|[$JS_WHITESPACE]-[$JS_WHITESPACE]")
+
 private fun sentences(text: String): List<String> =
     SENTENCE_BREAK.split(text).map { jsTrim(it) }.filter { it.isNotEmpty() }
 
@@ -90,9 +93,13 @@ fun checkQuestion(question: String, witness: WitnessIndex): GuardResult {
     val endsAsk = last.endsWith("?")
     val endsImperative = last.endsWith(".") && lastFirst in IMPERATIVE_OPENERS
     if (!endsAsk && !endsImperative) reasons.add(Reason.NOT_A_QUESTION)
-    for (s in parts) {
-        val first = tokenize(s).firstOrNull()?.lower ?: ""
-        if (s.endsWith("?") && first in CLOSED_OPENERS) reasons.add(Reason.CLOSED_FORM)
+    // A yes-or-no question can open a sentence, a clause after a comma or dash ("You said the car, was it fast?"), or
+    // follow a joining word ("And was it fast?").
+    for (s in parts.filter { it.endsWith("?") }) {
+        for (clause in CLAUSE_BREAK.split(s)) {
+            val first = tokenize(clause).firstOrNull { it.lower !in JOINERS }?.lower ?: ""
+            if (first in CLOSED_OPENERS) reasons.add(Reason.CLOSED_FORM)
+        }
     }
     if (tokens.any { it.lower == "or" }) reasons.add(Reason.EITHER_OR)
 

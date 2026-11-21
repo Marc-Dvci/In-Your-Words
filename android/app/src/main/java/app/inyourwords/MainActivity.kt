@@ -80,6 +80,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.appcheck.appCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.initialize
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneId
@@ -101,7 +102,7 @@ sealed interface Screen {
     data object Interview : Screen
     data object Review : Screen
     data class Sealed(val hex: String, val at: Instant, val existing: Boolean) : Screen
-    data class Handover(val code: String?) : Screen
+    data class Handover(val code: String?, val error: String? = null) : Screen
 }
 
 @Composable
@@ -112,6 +113,23 @@ fun App() {
     var config by remember { mutableStateOf(RuntimeConfig()) }
     LaunchedEffect(Unit) { config = loadConfig() }
     val scope = rememberCoroutineScope()
+
+    // Stores the account encrypted under a new code. If Firestore refuses or fails, the screen says so.
+    fun handover(current: Session) {
+        val code = newCode()
+        screen = Screen.Handover(null)
+        scope.launch {
+            try {
+                val box = encrypt(code, sessionJson(current))
+                Store.putHandover(recordId(code), box.iv, box.ct)
+                screen = Screen.Handover(code)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                screen = Screen.Handover(null, "The code could not be saved: ${e.message}")
+            }
+        }
+    }
 
     Box(Modifier.fillMaxSize().background(Ink.paper).safeDrawingPadding()) {
         AnimatedContent(
@@ -128,35 +146,17 @@ fun App() {
                     screen = Screen.Interview
                 }
                 Screen.Interview -> session?.let { current ->
-                    Interview(current, engine, config, onChange = { session = it }, onDone = { session = it; screen = Screen.Review }, onHandover = {
-                        val code = newCode()
-                        screen = Screen.Handover(null)
-                        scope.launch {
-                            val box = encrypt(code, sessionJson(current))
-                            Store.putHandover(recordId(code), box.iv, box.ct)
-                            screen = Screen.Handover(code)
-                        }
-                    })
+                    Interview(current, engine, config, onChange = { session = it }, onDone = { session = it; screen = Screen.Review }, onHandover = { handover(current) })
                 }
                 Screen.Review -> session?.let { current ->
                     Review(current) {
-                        scope.launch {
-                            val hex = fingerprint(sealable(current))
-                            val (at, existing) = Store.seal(hex, current.mode.wire)
-                            screen = Screen.Sealed(hex, at, existing)
-                        }
+                        val hex = fingerprint(sealable(current))
+                        val (at, existing) = Store.seal(hex, current.mode.wire)
+                        screen = Screen.Sealed(hex, at, existing)
                     }
                 }
-                is Screen.Sealed -> Sealed(s, onHandover = {
-                    val code = newCode()
-                    screen = Screen.Handover(null)
-                    scope.launch {
-                        val box = encrypt(code, sessionJson(session!!))
-                        Store.putHandover(recordId(code), box.iv, box.ct)
-                        screen = Screen.Handover(code)
-                    }
-                }, onRestart = { session = null; screen = Screen.Home })
-                is Screen.Handover -> Handover(s.code) { screen = Screen.Home }
+                is Screen.Sealed -> Sealed(s, onHandover = { session?.let { handover(it) } }, onRestart = { session = null; screen = Screen.Home })
+                is Screen.Handover -> Handover(s.code, s.error) { screen = Screen.Home }
             }
         }
     }
@@ -292,9 +292,15 @@ fun Interview(session: Session, engine: HybridEngine?, config: RuntimeConfig, on
         draft = ""
         onChange(answered)
         if (!wantsFollowup(answered, config.maxFollowups)) { advance(answered); return }
+        if (engine == null) {
+            // Fixed questions: no model to wait for, so the next question appears at once.
+            ms = null
+            onChange(ask(answered, decide(answered, null, PromptSource.ON_DEVICE).prompt))
+            return
+        }
         busy = true
         scope.launch {
-            val proposed = try { engine?.propose(answered) } catch (e: Exception) { null }
+            val proposed = try { engine.propose(answered) } catch (e: Exception) { null }
             val d = decide(answered, proposed?.proposal, proposed?.source ?: PromptSource.ON_DEVICE)
             ms = if (d.prompt.source.wire == "template") null else proposed?.ms
             busy = false
@@ -314,7 +320,7 @@ fun Interview(session: Session, engine: HybridEngine?, config: RuntimeConfig, on
                 Account(segments, prompt.links, geo)
                 Spacer(Modifier.height(72.dp))
             }
-            if (busy) Thinking(engine?.kind ?: "on_device") else app.inyourwords.ui.Swap(prompt.text) {
+            if (busy && engine != null) Thinking(engine.kind) else app.inyourwords.ui.Swap(prompt.text) {
                 Column {
                     QuestionText(prompt, geo)
                     Spacer(Modifier.height(12.dp))
@@ -337,8 +343,10 @@ fun Interview(session: Session, engine: HybridEngine?, config: RuntimeConfig, on
 }
 
 @Composable
-fun Review(session: Session, onSeal: () -> Unit) = Page {
+fun Review(session: Session, seal: suspend () -> Unit) = Page {
     var sealing by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    val scope = rememberCoroutineScope()
     Mark()
     Spacer(Modifier.height(18.dp))
     Rail(PHASES.size, complete = true)
@@ -359,7 +367,24 @@ fun Review(session: Session, onSeal: () -> Unit) = Page {
     }
     Text("Sealing computes a fingerprint of every question and every answer above. Only that fingerprint leaves this phone, with the time it arrived.", style = Type.body)
     Spacer(Modifier.height(18.dp))
-    Pill(if (sealing) "Sealing…" else "Seal my account", enabled = !sealing, green = true) { sealing = true; onSeal() }
+    Pill(if (sealing) "Sealing…" else "Seal my account", enabled = !sealing, green = true) {
+        sealing = true
+        error = null
+        scope.launch {
+            try {
+                seal()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                error = "The seal could not be saved: ${e.message}"
+                sealing = false
+            }
+        }
+    }
+    error?.let {
+        Spacer(Modifier.height(14.dp))
+        Text(it, style = Type.body.copy(color = Ink.red))
+    }
 }
 
 @Composable
@@ -386,7 +411,7 @@ fun Sealed(s: Screen.Sealed, onHandover: () -> Unit, onRestart: () -> Unit) = Pa
 }
 
 @Composable
-fun Handover(code: String?, onDone: () -> Unit) = Page {
+fun Handover(code: String?, error: String?, onDone: () -> Unit) = Page {
     Mark()
     Spacer(Modifier.height(40.dp))
     Text("CONTINUE ON YOUR LAPTOP", style = Type.eyebrow)
@@ -396,6 +421,10 @@ fun Handover(code: String?, onDone: () -> Unit) = Page {
     Text(code?.let { formatCode(it) } ?: "····-····-····-····-····", style = Type.mono.copy(fontSize = Type.mono.fontSize * 1.7f))
     Spacer(Modifier.height(16.dp))
     Text("Your account travels encrypted with a key made from this code. The code never leaves this screen. It works once, for 30 minutes.", style = Type.body)
+    error?.let {
+        Spacer(Modifier.height(14.dp))
+        Text(it, style = Type.body.copy(color = Ink.red))
+    }
     Spacer(Modifier.height(24.dp))
     Quiet("Done", onDone)
 }

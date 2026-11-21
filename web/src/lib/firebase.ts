@@ -6,7 +6,7 @@
 import { initializeApp, type FirebaseApp } from "firebase/app";
 import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
 import { getFirestore, type Firestore } from "firebase/firestore";
-import { fetchAndActivate, getRemoteConfig, getValue } from "firebase/remote-config";
+import { fetchAndActivate, getRemoteConfig, getValue, type RemoteConfig } from "firebase/remote-config";
 import { getAI, GoogleAIBackend, type AI } from "firebase/ai";
 
 export interface Services {
@@ -62,15 +62,19 @@ async function start(): Promise<Services> {
   const rc = getRemoteConfig(app);
   rc.settings.minimumFetchIntervalMillis = 10 * 60 * 1000;
   rc.defaultConfig = { cloud_model: DEFAULTS.cloudModel, tts_model: DEFAULTS.ttsModel, max_followups: DEFAULTS.maxFollowups };
-  try {
-    await fetchAndActivate(rc);
-  } catch {
-    // Offline or blocked: the defaults above apply.
-  }
-  const config: RuntimeConfig = {
+  // The first screen does not wait for the network. Each value is read at the moment it is used, so the values from
+  // Remote Config apply as soon as they arrive; until then, and offline, the defaults above apply.
+  const config: RuntimeConfig = { ...DEFAULTS };
+  fetchAndActivate(rc)
+    .then(() => Object.assign(config, readConfig(rc)))
+    .catch(() => undefined);
+  return { app, ai: getAI(app, { backend: new GoogleAIBackend() }), db: getFirestore(app), config };
+}
+
+function readConfig(rc: RemoteConfig): RuntimeConfig {
+  return {
     cloudModel: getValue(rc, "cloud_model").asString() || DEFAULTS.cloudModel,
     ttsModel: getValue(rc, "tts_model").asString() || DEFAULTS.ttsModel,
     maxFollowups: getValue(rc, "max_followups").asNumber() || DEFAULTS.maxFollowups,
   };
-  return { app, ai: getAI(app, { backend: new GoogleAIBackend() }), db: getFirestore(app), config };
 }

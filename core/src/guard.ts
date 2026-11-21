@@ -5,7 +5,10 @@
  */
 
 import { normalize, tokenize, type Token } from "./text.js";
-import { CLOSED_OPENERS, IMPERATIVE_OPENERS, isFreeWord } from "./words.js";
+import { CLOSED_OPENERS, IMPERATIVE_OPENERS, isFreeWord, JOINERS } from "./words.js";
+
+/** Where a new clause can start inside a sentence: a comma, semicolon, colon, or dash. */
+const CLAUSE_BREAK = /[,;:–—]|\s-\s/;
 
 /** The witness's own words: one entry per answer, in the order given. */
 export interface WitnessIndex {
@@ -76,9 +79,13 @@ export function checkQuestion(question: string, witness: WitnessIndex): GuardRes
   const endsAsk = last.endsWith("?");
   const endsImperative = last.endsWith(".") && IMPERATIVE_OPENERS.has(lastFirst);
   if (!endsAsk && !endsImperative) reasons.add("not_a_question");
-  for (const s of parts) {
-    const first = tokenize(s)[0]?.lower ?? "";
-    if (s.endsWith("?") && CLOSED_OPENERS.has(first)) reasons.add("closed_form");
+  // A yes-or-no question can open a sentence, a clause after a comma or dash ("You said the car, was it fast?"), or
+  // follow a joining word ("And was it fast?").
+  for (const s of parts.filter((p) => p.endsWith("?"))) {
+    for (const clause of s.split(CLAUSE_BREAK)) {
+      const first = tokenize(clause).find((t) => !JOINERS.has(t.lower))?.lower ?? "";
+      if (CLOSED_OPENERS.has(first)) reasons.add("closed_form");
+    }
   }
   if (tokens.some((t) => t.lower === "or")) reasons.add("either_or");
 

@@ -43,6 +43,9 @@ export const CLOSED_OPENERS: ReadonlySet<string> = new Set(
     .filter(Boolean),
 );
 
+/** Words that may come before the auxiliary of a yes-or-no question: "And was it…?", "So did he…?". */
+export const JOINERS: ReadonlySet<string> = new Set(["and", "so", "but", "then", "now", "also", "okay", "ok", "well"]);
+
 /** Imperatives that may open a statement-form prompt ending in a full stop instead of a question mark. */
 export const IMPERATIVE_OPENERS: ReadonlySet<string> = new Set(["tell", "describe", "talk", "take", "explain", "go"]);
 

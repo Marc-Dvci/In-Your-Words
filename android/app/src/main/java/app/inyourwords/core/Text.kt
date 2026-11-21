@@ -104,6 +104,28 @@ private fun undouble(w: String): String {
 
 private fun hasVowel(s: String): Boolean = s.any { it in VOWELS }
 
+/** A vowel, with "y" counted as one after a consonant ("cry") and as a consonant after a vowel ("play"). */
+private fun isVowel(w: String, i: Int): Boolean = w[i] in "aeiou" || (w[i] == 'y' && i > 0 && !isVowel(w, i - 1))
+
+/** Porter's measure: how many times a vowel is followed by a consonant. */
+private fun measure(w: String): Int = (1 until w.length).count { isVowel(w, it - 1) && !isVowel(w, it) }
+
+/** Ends consonant, vowel, consonant, the last not w, x or y: the shape left by "hated" or "coping". */
+private fun cvc(w: String): Boolean {
+    val n = w.length
+    return n >= 3 && !isVowel(w, n - 3) && isVowel(w, n - 2) && !isVowel(w, n - 1) && w[n - 1] !in "wxy"
+}
+
+/**
+ * What remains after -ed or -ing: a doubled consonant is undone ("clipped" to "clip"), and a dropped silent e is put
+ * back ("hated" to "hate", "coping" to "cope"), so the form never folds into a shorter word such as "hat" or "cop".
+ */
+private fun settle(w: String): String {
+    val u = undouble(w)
+    if (u != w) return u
+    return if (measure(w) == 1 && cvc(w)) w + "e" else w
+}
+
 /** Folds the inflections of an English word (plural, possessive, -ing, -ed), so that forms of one word share a stem. */
 fun stem(word: String): String {
     var w = jsLowercase(word).replace('’', '\'')
@@ -113,9 +135,9 @@ fun stem(word: String): String {
     return when {
         w.endsWith("ies") && w.length > 4 -> w.dropLast(3) + "y"
         w.endsWith("sses") -> w.dropLast(2)
-        w.endsWith("ing") && w.length >= 6 && hasVowel(w.dropLast(3)) -> undouble(w.dropLast(3))
+        w.endsWith("ing") && w.length >= 6 && hasVowel(w.dropLast(3)) -> settle(w.dropLast(3))
         w.endsWith("ied") && w.length > 4 -> w.dropLast(3) + "y"
-        w.endsWith("ed") && !w.endsWith("eed") && w.length >= 5 && hasVowel(w.dropLast(2)) -> undouble(w.dropLast(2))
+        w.endsWith("ed") && !w.endsWith("eed") && w.length >= 5 && hasVowel(w.dropLast(2)) -> settle(w.dropLast(2))
         w.endsWith("es") && SIBILANT_ES.containsMatchIn(w) -> w.dropLast(2)
         w.endsWith("s") && !UNSTRESSED_S.containsMatchIn(w) -> w.dropLast(1)
         else -> w

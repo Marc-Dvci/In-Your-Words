@@ -2,7 +2,8 @@
   "about": "Shared guard cases. The TypeScript and Kotlin guards must return exactly these reasons and foreign words.",
   "witness": [
     "I was waiting at the crossing by the bakery when a dark estate car came round the corner too fast. It clipped the back wheel of a cyclist and he fell against the kerb. The car slowed for a second, then drove off towards the bridge. I think the driver wore a cap. There was a sticker on the rear window, white, maybe round.",
-    "There were 2 people in the car."
+    "There were 2 people in the car.",
+    "I was scared, but I was coping."
   ],
   "cases": [
     {
@@ -350,6 +351,76 @@
         [
           "windows",
           "window"
+        ]
+      ]
+    },
+    {
+      "question": "What else do you remember about the moment you were scared?",
+      "ok": true,
+      "reasons": [],
+      "foreign": [],
+      "links": [
+        [
+          "scared",
+          "scared"
+        ]
+      ]
+    },
+    {
+      "question": "Tell me everything you remember about the scar.",
+      "ok": false,
+      "reasons": [
+        "foreign_words"
+      ],
+      "foreign": [
+        "scar"
+      ],
+      "links": []
+    },
+    {
+      "question": "Tell me about the cop.",
+      "ok": false,
+      "reasons": [
+        "foreign_words"
+      ],
+      "foreign": [
+        "cop"
+      ],
+      "links": []
+    },
+    {
+      "question": "You said a dark estate car, was it fast?",
+      "ok": false,
+      "reasons": [
+        "closed_form"
+      ],
+      "foreign": [],
+      "links": [
+        [
+          "dark estate car",
+          "dark estate car"
+        ],
+        [
+          "fast",
+          "fast"
+        ]
+      ]
+    },
+    {
+      "question": "And was the car fast?",
+      "ok": false,
+      "reasons": [
+        "closed_form"
+      ],
+      "foreign": [],
+      "links": [
+        [
+          "car",
+          "car"
+        ],
+        [
+          "fast",
+          "fast"
         ]
       ]
     }

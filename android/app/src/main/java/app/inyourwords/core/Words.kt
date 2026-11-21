@@ -49,6 +49,9 @@ val CLOSED_OPENERS: Set<String> = wordSet(
     """,
 )
 
+/** Words that may come before the auxiliary of a yes-or-no question: "And was it…?", "So did he…?". */
+val JOINERS: Set<String> = setOf("and", "so", "but", "then", "now", "also", "okay", "ok", "well")
+
 /** Imperatives that may open a statement-form prompt ending in a full stop instead of a question mark. */
 val IMPERATIVE_OPENERS: Set<String> = setOf("tell", "describe", "talk", "take", "explain", "go")
 
